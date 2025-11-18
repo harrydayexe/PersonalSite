@@ -26,7 +26,26 @@ go.work.sum
 
 # env file
 .env
+.env.local
 
 # Editor/IDE
-# .idea/
-# .vscode/
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Compiled binary
+main
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+tmp/
+
+# Build artifacts
+dist/
+build/
