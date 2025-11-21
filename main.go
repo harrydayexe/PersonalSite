@@ -22,18 +22,25 @@ func main() {
 	mux.Handle("/static/", http.StripPrefix("/static/", fs))
 
 	// Initialize GoBlog server for blog functionality
-	blogConfig := server.Config{
-		PostsDirectory: postsDir,
-		// Add additional configuration as needed
+	blogOpts := server.Options{
+		ContentPath:  postsDir,
+		EnableCache:  true, // Use Ristretto caching for better performance
+		EnableSearch: true, // Enable Bleve full-text search
+		PostsPerPage: 10,   // Number of posts per page
 	}
 
-	blogServer, err := server.New(blogConfig)
+	blogServer, err := server.New(blogOpts)
 	if err != nil {
 		log.Fatalf("Failed to initialize blog server: %v", err)
 	}
+	defer func() {
+		if err := blogServer.Close(); err != nil {
+			log.Printf("Error closing blog server: %v", err)
+		}
+	}()
 
-	// Mount blog routes under /blog
-	mux.Handle("/blog/", http.StripPrefix("/blog", blogServer))
+	// Attach blog routes to the mux at /blog path
+	blogServer.AttachRoutes(mux, "/blog")
 
 	// Home page handler
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -55,7 +62,9 @@ func main() {
 	}
 }
 
-// getEnv gets an environment variable or returns a default value
+// getEnv retrieves an environment variable or returns a default value if not set.
+// This is used to configure the server from the environment while providing
+// sensible defaults for local development.
 func getEnv(key, defaultValue string) string {
 	if value := os.Getenv(key); value != "" {
 		return value
