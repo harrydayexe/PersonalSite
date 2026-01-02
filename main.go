@@ -1,64 +1,68 @@
 package main
 
 import (
-	"log"
+	"context"
+	"embed"
+	"fmt"
+	"io"
+	"log/slog"
 	"net/http"
 	"os"
+	"os/signal"
+	"sync"
+	"time"
 
-	"github.com/harrydayexe/GoBlog/pkg/server"
+	"github.com/harrydayexe/PersonalSite/internal/static-content"
 )
 
+//go:embed static/*
+var staticFiles embed.FS
+
 func main() {
-	// Get configuration from environment variables with defaults
-	port := getEnv("PORT", "8080")
-	staticDir := getEnv("STATIC_DIR", "./static")
-	postsDir := getEnv("POSTS_DIR", "./posts")
+	ctx := context.Background()
 
-	// Create a new ServeMux for routing
 	mux := http.NewServeMux()
+	staticcontent.AddStaticRoutes(mux, staticFiles)
 
-	// Serve static files
-	fs := http.FileServer(http.Dir(staticDir))
-	mux.Handle("/static/", http.StripPrefix("/static/", fs))
-
-	// Initialize GoBlog server for blog functionality
-	blogConfig := server.Config{
-		PostsDirectory: postsDir,
-		// Add additional configuration as needed
-	}
-
-	blogServer, err := server.New(blogConfig)
-	if err != nil {
-		log.Fatalf("Failed to initialize blog server: %v", err)
-	}
-
-	// Mount blog routes under /blog
-	mux.Handle("/blog/", http.StripPrefix("/blog", blogServer))
-
-	// Home page handler
-	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/" {
-			http.NotFound(w, r)
-			return
-		}
-		http.ServeFile(w, r, staticDir+"/index.html")
-	})
-
-	// Start the server
-	addr := ":" + port
-	log.Printf("Server starting on %s", addr)
-	log.Printf("Static content directory: %s", staticDir)
-	log.Printf("Blog posts directory: %s", postsDir)
-
-	if err := http.ListenAndServe(addr, mux); err != nil {
-		log.Fatalf("Server failed to start: %v", err)
+	if err := Run(ctx, mux, os.Stdout); err != nil {
+		fmt.Fprintf(os.Stderr, "%s\n", err)
+		os.Exit(1)
 	}
 }
 
-// getEnv gets an environment variable or returns a default value
-func getEnv(key, defaultValue string) string {
-	if value := os.Getenv(key); value != "" {
-		return value
+// run starts the HTTP server with the provided handler.
+func Run(ctx context.Context, srv http.Handler, stdout io.Writer) error {
+	ctx, cancel := signal.NotifyContext(ctx, os.Interrupt)
+	defer cancel()
+
+	logger := slog.Default()
+
+	httpServer := &http.Server{
+		Addr:    fmt.Sprintf(":%d", 8080),
+		Handler: srv,
 	}
-	return defaultValue
+	go func() {
+		logger.Info(
+			"server listening",
+			slog.String("address", httpServer.Addr),
+		)
+		if err := httpServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			fmt.Fprintf(os.Stderr, "error listening and serving: %s\n", err)
+		}
+	}()
+	var wg sync.WaitGroup
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		<-ctx.Done()
+		// make a new context for the Shutdown
+		shutdownCtx := context.Background()
+		shutdownCtx, cancel := context.WithTimeout(ctx, 10*time.Second)
+		defer cancel()
+		if err := httpServer.Shutdown(shutdownCtx); err != nil {
+			fmt.Fprintf(os.Stderr, "error shutting down http server: %s\n", err)
+		}
+	}()
+	wg.Wait()
+	return nil
 }
