@@ -4,7 +4,7 @@ import (
 	"context"
 	"embed"
 	"fmt"
-	"io"
+	"log"
 	"log/slog"
 	"net/http"
 	"os"
@@ -12,7 +12,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/harrydayexe/PersonalSite/internal/static-content"
+	"github.com/caarlos0/env/v11"
+	"github.com/harrydayexe/PersonalSite/internal/config"
+	staticcontent "github.com/harrydayexe/PersonalSite/internal/static-content"
 )
 
 //go:embed static/*
@@ -20,25 +22,67 @@ var staticFiles embed.FS
 
 func main() {
 	ctx := context.Background()
+	var serverCfg config.ServerConfig = parseConfig[config.ServerConfig]()
+
+	setDefaultLogger(serverCfg)
+
+	logger := slog.Default()
+	logger.Debug("Default logger configured")
 
 	mux := http.NewServeMux()
 	staticcontent.AddStaticRoutes(mux, staticFiles)
+	logger.Debug("Static routes added to mux")
 
-	if err := Run(ctx, mux, os.Stdout); err != nil {
+	if err := run(ctx, mux, serverCfg); err != nil {
 		fmt.Fprintf(os.Stderr, "%s\n", err)
 		os.Exit(1)
 	}
 }
 
-// run starts the HTTP server with the provided handler.
-func Run(ctx context.Context, srv http.Handler, stdout io.Writer) error {
+// parseConfig sets a config object based on environment variables
+func parseConfig[C any]() C {
+	var cfg C
+
+	if err := env.Parse(&cfg); err != nil {
+		log.Fatal(err)
+	}
+
+	return cfg
+}
+
+// setDefaultLogger sets the default slog logger to be used in the application
+func setDefaultLogger(cfg config.ServerConfig) {
+	var logger *slog.Logger
+	var handlerOptions slog.HandlerOptions
+
+	if cfg.VerboseMode {
+		handlerOptions = slog.HandlerOptions{Level: slog.LevelDebug}
+	} else {
+		handlerOptions = slog.HandlerOptions{Level: slog.LevelInfo}
+	}
+
+	if cfg.Environment == config.Local {
+		logger = slog.New(slog.NewTextHandler(os.Stdout, &handlerOptions))
+	} else {
+		logger = slog.New(slog.NewJSONHandler(os.Stdout, &handlerOptions))
+	}
+
+	slog.SetDefault(logger)
+}
+
+// Run starts the HTTP server with the provided handler.
+func run(
+	ctx context.Context,
+	srv http.Handler,
+	cfg config.ServerConfig,
+) error {
 	ctx, cancel := signal.NotifyContext(ctx, os.Interrupt)
 	defer cancel()
 
 	logger := slog.Default()
 
 	httpServer := &http.Server{
-		Addr:    fmt.Sprintf(":%d", 8080),
+		Addr:    fmt.Sprintf(":%d", cfg.Port),
 		Handler: srv,
 	}
 	go func() {

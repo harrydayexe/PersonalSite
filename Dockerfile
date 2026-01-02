@@ -34,11 +34,6 @@ WORKDIR /app
 # Copy binary from builder
 COPY --from=builder /app/main .
 
-# Copy static content and posts
-COPY --chown=appuser:appuser static ./static
-COPY --chown=appuser:appuser posts ./posts
-COPY --chown=appuser:appuser templates ./templates
-
 # Switch to non-root user
 USER appuser
 
@@ -47,8 +42,8 @@ EXPOSE 8080
 
 # Set environment variables
 ENV PORT=8080
-ENV STATIC_DIR=./static
-ENV POSTS_DIR=./posts
+ENV ENVIRONMENT=production
+ENV VERBOSE=false
 
 # Run the application
 CMD ["./main"]
