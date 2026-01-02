@@ -12,8 +12,6 @@ jobs:
     permissions:
       packages: write
       contents: read
-      attestations: write
-      id-token: write
     steps:
       - name: Check out the repo
         uses: actions/checkout@v5
@@ -31,9 +29,8 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: ./Dockerfile
           push: true
           tags: |
-                ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.repository }}:latest
-                ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.repository }}:${{ github.sha }}
-          platforms: linux/amd64
+                ${{ secrets.DOCKERHUB_USERNAME }}/personalsite:latest
+                ${{ secrets.DOCKERHUB_USERNAME }}/personalsite:${{ github.sha }}
+          platforms: linux/amd64,linux/arm64
