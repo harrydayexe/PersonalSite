@@ -1,7 +1,13 @@
 package config
 
+import "fmt"
+
 // Environment defines which environment the application is running in
 type Environment string
+
+func (e Environment) String() string {
+	return string(e)
+}
 
 const (
 	Local      Environment = "local"
@@ -17,4 +23,13 @@ type ServerConfig struct {
 	ReadTimeout  int         `env:"READ_TIMEOUT" envDefault:"15"`
 	WriteTimeout int         `env:"WRITE_TIMEOUT" envDefault:"15"`
 	IdleTimeout  int         `env:"IDLE_TIMEOUT" envDefault:"60"`
+}
+
+func (c ServerConfig) Validate() error {
+	switch c.Environment {
+	case Local, Test, Production:
+		return nil
+	default:
+		return fmt.Errorf("invalid environment: %s (must be local, test or production)", c.Environment)
+	}
 }

@@ -39,10 +39,13 @@ func main() {
 }
 
 // parseConfig sets a config object based on environment variables
-func parseConfig[C any]() C {
-	var cfg C
+func parseConfig[C config.Validator]() C {
+	cfg, err := env.ParseAs[C]()
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	if err := env.Parse(&cfg); err != nil {
+	if err := cfg.Validate(); err != nil {
 		log.Fatal(err)
 	}
 
@@ -91,6 +94,7 @@ func run(
 		logger.Info(
 			"server listening",
 			slog.String("address", httpServer.Addr),
+			slog.String("environment", cfg.Environment.String()),
 		)
 		if err := httpServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			fmt.Fprintf(os.Stderr, "error listening and serving: %s\n", err)
