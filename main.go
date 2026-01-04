@@ -81,8 +81,11 @@ func run(
 	logger := slog.Default()
 
 	httpServer := &http.Server{
-		Addr:    fmt.Sprintf(":%d", cfg.Port),
-		Handler: srv,
+		Addr:         fmt.Sprintf(":%d", cfg.Port),
+		Handler:      srv,
+		ReadTimeout:  time.Duration(cfg.ReadTimeout) * time.Second,
+		WriteTimeout: time.Duration(cfg.WriteTimeout) * time.Second,
+		IdleTimeout:  time.Duration(cfg.IdleTimeout) * time.Second,
 	}
 	go func() {
 		logger.Info(
