@@ -34,8 +34,7 @@ func main() {
 	logger.Debug("Static routes added to mux")
 
 	if err := run(ctx, mux, serverCfg); err != nil {
-		fmt.Fprintf(os.Stderr, "%s\n", err)
-		os.Exit(1)
+		log.Fatal(err)
 	}
 }
 
@@ -98,10 +97,10 @@ func run(
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
+		// wait for ctx cancellation
 		<-ctx.Done()
 		// make a new context for the Shutdown
-		shutdownCtx := context.Background()
-		shutdownCtx, cancel := context.WithTimeout(ctx, 10*time.Second)
+		shutdownCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
 		if err := httpServer.Shutdown(shutdownCtx); err != nil {
 			fmt.Fprintf(os.Stderr, "error shutting down http server: %s\n", err)
