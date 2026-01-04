@@ -1,5 +1,5 @@
 # Build stage
-FROM golang:1.21-alpine AS builder
+FROM golang:1.25-alpine AS builder
 
 # Install build dependencies
 RUN apk add --no-cache git
@@ -34,11 +34,6 @@ WORKDIR /app
 # Copy binary from builder
 COPY --from=builder /app/main .
 
-# Copy static content and posts
-COPY --chown=appuser:appuser static ./static
-COPY --chown=appuser:appuser posts ./posts
-COPY --chown=appuser:appuser templates ./templates
-
 # Switch to non-root user
 USER appuser
 
@@ -47,8 +42,11 @@ EXPOSE 8080
 
 # Set environment variables
 ENV PORT=8080
-ENV STATIC_DIR=./static
-ENV POSTS_DIR=./posts
+ENV ENVIRONMENT=production
+ENV VERBOSE=false
+ENV READ_TIMEOUT=15
+ENV WRITE_TIMEOUT=15
+ENV IDLE_TIMEOUT=60
 
 # Run the application
 CMD ["./main"]

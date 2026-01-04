@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(1,0,0,1,-1516,-1923)">
+        <g transform="matrix(2.7157,0,0,2.94835,1416.3,1820.53)">
+            <path d="M413.778,114.169C413.778,70.339 375.145,34.755 327.56,34.755L122.93,34.755C75.345,34.755 36.712,70.339 36.712,114.169L36.712,302.653C36.712,346.483 75.345,382.067 122.93,382.067L327.56,382.067C375.145,382.067 413.778,346.483 413.778,302.653L413.778,114.169Z" style="fill:url(#_Linear1);"/>
+        </g>
+        <g transform="matrix(0.857987,0,0,0.857987,1492.92,2066.71)">
+            <text x="47.626px" y="565.514px" style="font-family:'SFCompactDisplay-Bold', 'SF Compact Display', sans-serif;font-weight:700;font-size:465.205px;fill:white;">Omni</text>
+        </g>
+    </g>
+    <defs>
+        <linearGradient id="_Linear1" x1="0" y1="0" x2="1" y2="0" gradientUnits="userSpaceOnUse" gradientTransform="matrix(2.30886e-14,347.313,-377.066,2.12668e-14,225.245,34.7547)"><stop offset="0" style="stop-color:rgb(255,131,0);stop-opacity:1"/><stop offset="1" style="stop-color:rgb(255,50,0);stop-opacity:1"/></linearGradient>
+    </defs>
+</svg>

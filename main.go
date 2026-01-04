@@ -1,64 +1,118 @@
 package main
 
 import (
+	"context"
+	"embed"
+	"fmt"
 	"log"
+	"log/slog"
 	"net/http"
 	"os"
+	"os/signal"
+	"sync"
+	"time"
 
-	"github.com/harrydayexe/GoBlog/pkg/server"
+	"github.com/caarlos0/env/v11"
+	"github.com/harrydayexe/PersonalSite/internal/config"
+	staticcontent "github.com/harrydayexe/PersonalSite/internal/static-content"
 )
 
+//go:embed static/*
+var staticFiles embed.FS
+
 func main() {
-	// Get configuration from environment variables with defaults
-	port := getEnv("PORT", "8080")
-	staticDir := getEnv("STATIC_DIR", "./static")
-	postsDir := getEnv("POSTS_DIR", "./posts")
+	ctx := context.Background()
+	serverCfg := parseConfig[config.ServerConfig]()
 
-	// Create a new ServeMux for routing
+	setDefaultLogger(serverCfg)
+
+	logger := slog.Default()
+	logger.Debug("Default logger configured")
+
 	mux := http.NewServeMux()
+	staticcontent.AddStaticRoutes(mux, staticFiles)
+	logger.Debug("Static routes added to mux")
 
-	// Serve static files
-	fs := http.FileServer(http.Dir(staticDir))
-	mux.Handle("/static/", http.StripPrefix("/static/", fs))
-
-	// Initialize GoBlog server for blog functionality
-	blogConfig := server.Config{
-		PostsDirectory: postsDir,
-		// Add additional configuration as needed
-	}
-
-	blogServer, err := server.New(blogConfig)
-	if err != nil {
-		log.Fatalf("Failed to initialize blog server: %v", err)
-	}
-
-	// Mount blog routes under /blog
-	mux.Handle("/blog/", http.StripPrefix("/blog", blogServer))
-
-	// Home page handler
-	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/" {
-			http.NotFound(w, r)
-			return
-		}
-		http.ServeFile(w, r, staticDir+"/index.html")
-	})
-
-	// Start the server
-	addr := ":" + port
-	log.Printf("Server starting on %s", addr)
-	log.Printf("Static content directory: %s", staticDir)
-	log.Printf("Blog posts directory: %s", postsDir)
-
-	if err := http.ListenAndServe(addr, mux); err != nil {
-		log.Fatalf("Server failed to start: %v", err)
+	if err := run(ctx, mux, serverCfg); err != nil {
+		log.Fatal(err)
 	}
 }
 
-// getEnv gets an environment variable or returns a default value
-func getEnv(key, defaultValue string) string {
-	if value := os.Getenv(key); value != "" {
-		return value
+// parseConfig sets a config object based on environment variables
+func parseConfig[C config.Validator]() C {
+	cfg, err := env.ParseAs[C]()
+	if err != nil {
+		log.Fatal(err)
 	}
-	return defaultValue
+
+	if err := cfg.Validate(); err != nil {
+		log.Fatal(err)
+	}
+
+	return cfg
+}
+
+// setDefaultLogger sets the default slog logger to be used in the application
+func setDefaultLogger(cfg config.ServerConfig) {
+	var logger *slog.Logger
+	var handlerOptions slog.HandlerOptions
+
+	if cfg.VerboseMode {
+		handlerOptions = slog.HandlerOptions{Level: slog.LevelDebug}
+	} else {
+		handlerOptions = slog.HandlerOptions{Level: slog.LevelInfo}
+	}
+
+	if cfg.Environment == config.Local {
+		logger = slog.New(slog.NewTextHandler(os.Stdout, &handlerOptions))
+	} else {
+		logger = slog.New(slog.NewJSONHandler(os.Stdout, &handlerOptions))
+	}
+
+	slog.SetDefault(logger)
+}
+
+// Run starts the HTTP server with the provided handler.
+func run(
+	ctx context.Context,
+	srv http.Handler,
+	cfg config.ServerConfig,
+) error {
+	ctx, cancel := signal.NotifyContext(ctx, os.Interrupt)
+	defer cancel()
+
+	logger := slog.Default()
+
+	httpServer := &http.Server{
+		Addr:         fmt.Sprintf(":%d", cfg.Port),
+		Handler:      srv,
+		ReadTimeout:  time.Duration(cfg.ReadTimeout) * time.Second,
+		WriteTimeout: time.Duration(cfg.WriteTimeout) * time.Second,
+		IdleTimeout:  time.Duration(cfg.IdleTimeout) * time.Second,
+	}
+	go func() {
+		logger.Info(
+			"server listening",
+			slog.String("address", httpServer.Addr),
+			slog.String("environment", cfg.Environment.String()),
+		)
+		if err := httpServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			fmt.Fprintf(os.Stderr, "error listening and serving: %s\n", err)
+		}
+	}()
+	var wg sync.WaitGroup
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		// wait for ctx cancellation
+		<-ctx.Done()
+		// make a new context for the Shutdown
+		shutdownCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+		if err := httpServer.Shutdown(shutdownCtx); err != nil {
+			fmt.Fprintf(os.Stderr, "error shutting down http server: %s\n", err)
+		}
+	}()
+	wg.Wait()
+	return nil
 }
