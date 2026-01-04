@@ -22,7 +22,7 @@ var staticFiles embed.FS
 
 func main() {
 	ctx := context.Background()
-	var serverCfg config.ServerConfig = parseConfig[config.ServerConfig]()
+	serverCfg := parseConfig[config.ServerConfig]()
 
 	setDefaultLogger(serverCfg)
 
