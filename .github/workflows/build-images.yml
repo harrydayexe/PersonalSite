@@ -34,3 +34,7 @@ jobs:
                 ${{ secrets.DOCKERHUB_USERNAME }}/personalsite:latest
                 ${{ secrets.DOCKERHUB_USERNAME }}/personalsite:${{ github.sha }}
           platforms: linux/amd64,linux/arm64
+
+      - name: Notify Dokploy
+        continue-on-error: true
+        run: curl -sSf "https://dokploy.harryday.tech/api/deploy/compose/EAr7mll4McXohRyL5XSZM"
