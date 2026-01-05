@@ -3,17 +3,11 @@ package main
 import (
 	"context"
 	"embed"
-	"fmt"
 	"log"
 	"log/slog"
 	"net/http"
-	"os"
-	"os/signal"
-	"sync"
-	"time"
 
-	"github.com/caarlos0/env/v11"
-	"github.com/harrydayexe/PersonalSite/internal/config"
+	"github.com/harrydayexe/GoWebUtilities/server"
 	staticcontent "github.com/harrydayexe/PersonalSite/internal/static-content"
 )
 
@@ -22,10 +16,8 @@ var staticFiles embed.FS
 
 func main() {
 	ctx := context.Background()
-	serverCfg := parseConfig[config.ServerConfig]()
 
-	setDefaultLogger(serverCfg)
-
+	// setDefaultLogger(serverCfg)
 	logger := slog.Default()
 	logger.Debug("Default logger configured")
 
@@ -33,86 +25,27 @@ func main() {
 	staticcontent.AddStaticRoutes(mux, staticFiles)
 	logger.Debug("Static routes added to mux")
 
-	if err := run(ctx, mux, serverCfg); err != nil {
+	if err := server.Run(ctx, mux); err != nil {
 		log.Fatal(err)
 	}
 }
 
-// parseConfig sets a config object based on environment variables
-func parseConfig[C config.Validator]() C {
-	cfg, err := env.ParseAs[C]()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	if err := cfg.Validate(); err != nil {
-		log.Fatal(err)
-	}
-
-	return cfg
-}
-
-// setDefaultLogger sets the default slog logger to be used in the application
-func setDefaultLogger(cfg config.ServerConfig) {
-	var logger *slog.Logger
-	var handlerOptions slog.HandlerOptions
-
-	if cfg.VerboseMode {
-		handlerOptions = slog.HandlerOptions{Level: slog.LevelDebug}
-	} else {
-		handlerOptions = slog.HandlerOptions{Level: slog.LevelInfo}
-	}
-
-	if cfg.Environment == config.Local {
-		logger = slog.New(slog.NewTextHandler(os.Stdout, &handlerOptions))
-	} else {
-		logger = slog.New(slog.NewJSONHandler(os.Stdout, &handlerOptions))
-	}
-
-	slog.SetDefault(logger)
-}
-
-// Run starts the HTTP server with the provided handler.
-func run(
-	ctx context.Context,
-	srv http.Handler,
-	cfg config.ServerConfig,
-) error {
-	ctx, cancel := signal.NotifyContext(ctx, os.Interrupt)
-	defer cancel()
-
-	logger := slog.Default()
-
-	httpServer := &http.Server{
-		Addr:         fmt.Sprintf(":%d", cfg.Port),
-		Handler:      srv,
-		ReadTimeout:  time.Duration(cfg.ReadTimeout) * time.Second,
-		WriteTimeout: time.Duration(cfg.WriteTimeout) * time.Second,
-		IdleTimeout:  time.Duration(cfg.IdleTimeout) * time.Second,
-	}
-	go func() {
-		logger.Info(
-			"server listening",
-			slog.String("address", httpServer.Addr),
-			slog.String("environment", cfg.Environment.String()),
-		)
-		if err := httpServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			fmt.Fprintf(os.Stderr, "error listening and serving: %s\n", err)
-		}
-	}()
-	var wg sync.WaitGroup
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		// wait for ctx cancellation
-		<-ctx.Done()
-		// make a new context for the Shutdown
-		shutdownCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-		defer cancel()
-		if err := httpServer.Shutdown(shutdownCtx); err != nil {
-			fmt.Fprintf(os.Stderr, "error shutting down http server: %s\n", err)
-		}
-	}()
-	wg.Wait()
-	return nil
-}
+// // setDefaultLogger sets the default slog logger to be used in the application
+// func setDefaultLogger(cfg config.ServerConfig) {
+// 	var logger *slog.Logger
+// 	var handlerOptions slog.HandlerOptions
+//
+// 	if cfg.VerboseMode {
+// 		handlerOptions = slog.HandlerOptions{Level: slog.LevelDebug}
+// 	} else {
+// 		handlerOptions = slog.HandlerOptions{Level: slog.LevelInfo}
+// 	}
+//
+// 	if cfg.Environment == config.Local {
+// 		logger = slog.New(slog.NewTextHandler(os.Stdout, &handlerOptions))
+// 	} else {
+// 		logger = slog.New(slog.NewJSONHandler(os.Stdout, &handlerOptions))
+// 	}
+//
+// 	slog.SetDefault(logger)
+// }
