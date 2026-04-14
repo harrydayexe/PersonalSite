@@ -8,6 +8,7 @@ import (
 	"log/slog"
 	"net/http"
 
+	"github.com/harrydayexe/GoWebUtilities/middleware"
 	"github.com/harrydayexe/GoWebUtilities/server"
 	blogcontent "github.com/harrydayexe/PersonalSite/internal/blog"
 	staticcontent "github.com/harrydayexe/PersonalSite/internal/static-content"
@@ -35,7 +36,11 @@ func main() {
 		log.Fatal(err)
 	}
 
-	if err := server.Run(ctx, mux); err != nil {
+	stack := middleware.CreateStack(
+		middleware.NewLoggingMiddleware(logger),
+	)
+
+	if err := server.Run(ctx, stack(mux)); err != nil {
 		log.Fatal(err)
 	}
 }

@@ -1,0 +1,25 @@
+{{define "content"}}
+<h1 class="font-mono font-bold text-4xl text-gray-900 mb-2">All Tags</h1>
+<p class="text-gray-400 mb-8">{{.TotalTags}} {{if eq .TotalTags 1}}tag{{else}}tags{{end}}</p>
+
+{{if .Tags}}
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+    {{range .Tags}}
+    <a href="{{$.BlogRoot}}tags/{{.Name}}" class="flex justify-between items-center border-2 border-gray-100 rounded-lg px-4 py-3 hover:border-accent group transition-colors">
+        <span class="font-semibold text-gray-900 group-hover:text-accent transition-colors">#{{.Name}}</span>
+        <span class="text-sm text-gray-400">{{.PostCount}} {{if eq .PostCount 1}}post{{else}}posts{{end}}</span>
+    </a>
+    {{end}}
+</div>
+<div class="mt-8 pt-6 border-t border-gray-100">
+    <a href="{{.BlogRoot}}" class="text-accent font-medium hover:underline">&larr; Back to Blog</a>
+</div>
+{{else}}
+<div class="text-center py-16 text-gray-400">
+    <p>No tags yet.</p>
+</div>
+<div class="mt-4">
+    <a href="{{.BlogRoot}}" class="text-accent font-medium hover:underline">&larr; Back to Blog</a>
+</div>
+{{end}}
+{{end}}
