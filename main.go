@@ -7,6 +7,7 @@ import (
 	"log"
 	"log/slog"
 	"net/http"
+	"os"
 
 	"github.com/harrydayexe/GoWebUtilities/middleware"
 	"github.com/harrydayexe/GoWebUtilities/server"
@@ -20,9 +21,13 @@ var staticFiles embed.FS
 //go:embed posts
 var postsFiles embed.FS
 
+//go:embed templates
+var templateFiles embed.FS
+
 func main() {
 	ctx := context.Background()
-	logger := slog.Default()
+	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelDebug}))
+	slog.SetDefault(logger)
 
 	mux := http.NewServeMux()
 	staticcontent.AddStaticRoutes(mux, staticFiles)
@@ -32,7 +37,12 @@ func main() {
 		log.Fatal(err)
 	}
 
-	if err := blogcontent.AddBlogRoutes(ctx, mux, postsFS, logger); err != nil {
+	templatesFS, err := fs.Sub(templateFiles, "templates")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if err := blogcontent.AddBlogRoutes(ctx, mux, postsFS, templatesFS, logger); err != nil {
 		log.Fatal(err)
 	}
 

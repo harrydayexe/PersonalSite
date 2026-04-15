@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="h-full">
+{{template "head" .}}
+<body class="min-h-full flex flex-col bg-white text-gray-900 font-sans">
+    {{template "header" .}}
+    <main class="flex-1 max-w-[900px] w-full mx-auto px-5 py-10">
+        <h1 class="font-mono font-bold text-4xl text-gray-900 mb-2">Blog</h1>
+        <p class="text-gray-400 mb-8">{{.TotalPosts}} {{if eq .TotalPosts 1}}post{{else}}posts{{end}} published</p>
+
+        {{if .Posts}}
+        <div>
+            {{range .Posts}}
+            {{template "post-card" .}}
+            {{end}}
+        </div>
+        {{else}}
+        <div class="text-center py-16 text-gray-400">
+            <p>No posts yet. Check back soon.</p>
+        </div>
+        {{end}}
+    </main>
+    {{template "footer" .}}
+</body>
+</html>
