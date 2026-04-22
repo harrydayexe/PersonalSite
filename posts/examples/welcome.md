@@ -4,6 +4,7 @@ date: 2025-11-18
 author: "Harry Day"
 tags: ["welcome", "introduction"]
 slug: "welcome"
+description: "Test Description"
 ---
 
 # Welcome to My Blog

@@ -49,3 +49,5 @@ tmp/
 # Build artifacts
 dist/
 build/
+
+.claude/
