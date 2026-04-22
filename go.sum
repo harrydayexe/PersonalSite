@@ -25,6 +25,8 @@ github.com/harrydayexe/GoBlog/v2 v2.1.0-beta3 h1:amckbzk5RaINW7MyzDyLS9H47TvJG39
 github.com/harrydayexe/GoBlog/v2 v2.1.0-beta3/go.mod h1:U/dTfLyXtOXYlaHZue8xfmZwLl9EO9lCa5tEwFoUkeM=
 github.com/harrydayexe/GoWebUtilities v1.3.1 h1:VV//lBHwbal+tqyIcQRX6uLbanJGqZLvgrHV+4lBU0Y=
 github.com/harrydayexe/GoWebUtilities v1.3.1/go.mod h1:msGwhqkUbSAhhIR+uFnLE08OhBCwuJW0BQ5kUnBvI6I=
+github.com/harrydayexe/GoWebUtilities v1.3.2 h1:mfxgIkEqpRdEldyaDLKd5hmx2rcohxeRL+/0s0Svzgw=
+github.com/harrydayexe/GoWebUtilities v1.3.2/go.mod h1:msGwhqkUbSAhhIR+uFnLE08OhBCwuJW0BQ5kUnBvI6I=
 github.com/hexops/gotextdiff v1.0.3 h1:gitA9+qJrrTCsiCl7+kh75nPqQt1cx4ZkudSTLoUqJM=
 github.com/hexops/gotextdiff v1.0.3/go.mod h1:pSWU5MAI3yDq+fZBTazCSJysOMbxWL1BSow5/V2vxeg=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=

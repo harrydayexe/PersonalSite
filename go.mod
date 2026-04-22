@@ -4,7 +4,7 @@ go 1.25.4
 
 require (
 	github.com/harrydayexe/GoBlog/v2 v2.1.0-beta3
-	github.com/harrydayexe/GoWebUtilities v1.3.1
+	github.com/harrydayexe/GoWebUtilities v1.3.2
 )
 
 require (

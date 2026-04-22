@@ -7,8 +7,9 @@ import (
 	"log"
 	"log/slog"
 	"net/http"
-	"os"
 
+	"github.com/harrydayexe/GoWebUtilities/config"
+	"github.com/harrydayexe/GoWebUtilities/logging"
 	"github.com/harrydayexe/GoWebUtilities/middleware"
 	"github.com/harrydayexe/GoWebUtilities/server"
 	blogcontent "github.com/harrydayexe/PersonalSite/internal/blog"
@@ -26,8 +27,13 @@ var templateFiles embed.FS
 
 func main() {
 	ctx := context.Background()
-	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelDebug}))
-	slog.SetDefault(logger)
+	cfg, err := config.ParseConfig[config.ServerConfig]()
+	if err != nil {
+		log.Fatalf("failed to create config from environment: %s", err.Error())
+	}
+
+	logging.SetDefaultLogger(cfg)
+	logger := slog.Default()
 
 	mux := http.NewServeMux()
 	staticcontent.AddStaticRoutes(mux, staticFiles)
