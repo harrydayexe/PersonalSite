@@ -7,6 +7,7 @@ tmp_dir = "tmp"
   full_bin = "PORT=8080 LOG_LEVEL=INFO ENVIRONMENT=local ./build/main"
   include_ext = ["go", "html", "tmpl", "css", "js", "md"]
   exclude_dir = ["tmp", "build", "dist", ".git", ".github", ".claude"]
+  exclude_file = ["static/styles/tailwind.css"]
   follow_symlink = false
   delay = 500
   kill_delay = "0s"

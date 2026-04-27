@@ -51,3 +51,6 @@ dist/
 build/
 
 .claude/
+
+# Generated Tailwind bundle
+static/styles/tailwind.css

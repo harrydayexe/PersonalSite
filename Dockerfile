@@ -16,6 +16,19 @@ RUN go mod download
 # Copy source code
 COPY . .
 
+# Download tailwindcss standalone binary and build CSS bundle
+ARG TARGETARCH
+RUN case "${TARGETARCH}" in \
+        amd64) TW_ARCH=x64 ;; \
+        arm64) TW_ARCH=arm64 ;; \
+        *) echo "unsupported arch: ${TARGETARCH}" && exit 1 ;; \
+    esac && \
+    wget -qO /usr/local/bin/tailwindcss \
+        "https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-linux-${TW_ARCH}-musl" && \
+    chmod +x /usr/local/bin/tailwindcss
+
+RUN tailwindcss -i assets/styles/input.css -o static/styles/tailwind.css --minify
+
 # Build the application
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
 

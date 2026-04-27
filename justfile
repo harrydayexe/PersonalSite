@@ -4,11 +4,17 @@ environment := "local"
 
 default: run
 
+css:
+    tailwindcss -i assets/styles/input.css -o static/styles/tailwind.css --minify
+
+css-watch:
+    tailwindcss -i assets/styles/input.css -o static/styles/tailwind.css --watch
+
 dev:
     air
 
-build:
+build: css
     go build -o build/main .
 
-run:
+run: css
     PORT={{port}} LOG_LEVEL={{log_level}} ENVIRONMENT={{environment}} go run .
