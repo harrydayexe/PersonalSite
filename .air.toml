@@ -1,0 +1,23 @@
+root = "."
+tmp_dir = "tmp"
+
+[build]
+  cmd = "just build"
+  bin = "./build/main"
+  full_bin = "PORT=8080 LOG_LEVEL=INFO ENVIRONMENT=local ./build/main"
+  include_ext = ["go", "html", "tmpl", "css", "js", "md"]
+  exclude_dir = ["tmp", "build", "dist", ".git", ".github", ".claude"]
+  exclude_file = ["static/styles/tailwind.css"]
+  follow_symlink = false
+  delay = 500
+  kill_delay = "0s"
+  send_interrupt = true
+  # Keep previous binary running if build fails — survives typos gracefully.
+  stop_on_error = false
+  log = "build-errors.log"
+
+[log]
+  time = true
+
+[misc]
+  clean_on_exit = true

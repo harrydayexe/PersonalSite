@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+@source "../../templates/**/*.tmpl";
+@source "../../posts/**/*.md";
+
+@theme {
+    --color-accent: #FF9400;
+    --font-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
+                 "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace",
+                 "Source Code Pro", "Fira Mono", "Droid Sans Mono",
+                 "Courier New", monospace;
+}
+
+@layer base {
+    ::selection { background: #FF9400; color: #fff; }
+    ::-moz-selection { background: #FF9400; color: #fff; }
+}
