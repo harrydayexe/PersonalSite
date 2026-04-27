@@ -13,6 +13,8 @@ import (
 	goblogserver "github.com/harrydayexe/GoBlog/v2/pkg/server"
 )
 
+const blogRoot = "/blog/"
+
 // AddBlogRoutes registers the blog HTTP routes at /blog/ on the provided mux.
 // It uses custom templates matching the site's visual identity and serves posts
 // from the given fs.FS. It is not safe for concurrent use during setup, but the
@@ -28,7 +30,7 @@ func AddBlogRoutes(ctx context.Context, mux *http.ServeMux, posts fs.FS, templat
 	gen := generator.New(
 		posts,
 		renderer,
-		goblogconfig.WithBaseOption(goblogconfig.WithBlogRoot("/blog/")),
+		goblogconfig.WithBaseOption(goblogconfig.WithBlogRoot(blogRoot)),
 		goblogconfig.WithSiteTitle("Harry Day{}"),
 	)
 
@@ -45,8 +47,8 @@ func AddBlogRoutes(ctx context.Context, mux *http.ServeMux, posts fs.FS, templat
 
 	logger.DebugContext(ctx, "blog generated", slog.String("index", string(blog.Index)))
 
-	handler := goblogserver.Handler(blog, logger, goblogconfig.WithBlogRoot("/blog/"))
-	mux.Handle("/blog/", handler)
+	handler := goblogserver.Handler(blog, logger, goblogconfig.WithBlogRoot(blogRoot))
+	mux.Handle(blogRoot, handler)
 
 	logger.DebugContext(ctx, "finished adding blog routes")
 	return nil
