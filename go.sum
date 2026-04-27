@@ -23,6 +23,8 @@ github.com/harrydayexe/GoBlog/v2 v2.1.0-beta.1 h1:bkBElFpek+8d4g/GeDxlBGCqglhgfM
 github.com/harrydayexe/GoBlog/v2 v2.1.0-beta.1/go.mod h1:U/dTfLyXtOXYlaHZue8xfmZwLl9EO9lCa5tEwFoUkeM=
 github.com/harrydayexe/GoBlog/v2 v2.1.0-beta3 h1:amckbzk5RaINW7MyzDyLS9H47TvJG39La7GLGFR97iQ=
 github.com/harrydayexe/GoBlog/v2 v2.1.0-beta3/go.mod h1:U/dTfLyXtOXYlaHZue8xfmZwLl9EO9lCa5tEwFoUkeM=
+github.com/harrydayexe/GoBlog/v2 v2.1.0-beta4 h1:bFpHtAap0rFqfzwhPgsWhvBoJFxqSpd5RNIQp+sWLK0=
+github.com/harrydayexe/GoBlog/v2 v2.1.0-beta4/go.mod h1:U/dTfLyXtOXYlaHZue8xfmZwLl9EO9lCa5tEwFoUkeM=
 github.com/harrydayexe/GoWebUtilities v1.3.1 h1:VV//lBHwbal+tqyIcQRX6uLbanJGqZLvgrHV+4lBU0Y=
 github.com/harrydayexe/GoWebUtilities v1.3.1/go.mod h1:msGwhqkUbSAhhIR+uFnLE08OhBCwuJW0BQ5kUnBvI6I=
 github.com/harrydayexe/GoWebUtilities v1.3.2 h1:mfxgIkEqpRdEldyaDLKd5hmx2rcohxeRL+/0s0Svzgw=
