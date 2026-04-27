@@ -4,6 +4,9 @@ environment := "local"
 
 default: run
 
+dev:
+    air
+
 build:
     go build -o build/main .
 
