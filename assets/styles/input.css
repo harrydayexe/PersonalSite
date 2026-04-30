@@ -41,7 +41,7 @@
 }
 
 @layer base {
-    html { color-scheme: light dark; }
+    html { color-scheme: light dark; scroll-behavior: smooth; }
     ::selection { background: var(--accent); color: var(--paper); }
     ::-moz-selection { background: var(--accent); color: var(--paper); }
 }

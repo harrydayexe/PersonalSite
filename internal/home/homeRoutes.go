@@ -36,8 +36,8 @@ func AddHomeRoute(ctx context.Context, mux *http.ServeMux, postsFS fs.FS, templa
 		logger.WarnContext(ctx, "some posts failed to parse for home route", slog.String("error", err.Error()))
 	}
 	posts.SortByDate()
-	if len(posts) > 5 {
-		posts = posts[:5]
+	if len(posts) > 10 {
+		posts = posts[:10]
 	}
 
 	mux.HandleFunc("GET /{$}", func(w http.ResponseWriter, r *http.Request) {
