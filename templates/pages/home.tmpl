@@ -37,6 +37,7 @@
     <meta name="twitter:image" content="https://harryday.xyz/images/socialimage.png">
 
     <link rel="stylesheet" href="/styles/tailwind.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     {{if .DevMode}}
     <script>
         const es = new EventSource("/reload");
@@ -45,8 +46,19 @@
     {{end}}
 </head>
 <body class="bg-paper text-ink font-serif antialiased">
-<div class="mx-auto max-w-[640px] md:max-w-5xl px-6 pt-24 pb-20">
-<div class="flex flex-col space-y-6 md:grid md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] md:gap-16 md:space-y-0 md:items-start">
+<div class="mx-auto max-w-[640px] md:max-w-[1800px] px-6 md:px-20 pt-24 pb-20">
+<div x-data="{
+    active: 'writing',
+    init() {
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(e => { if (e.isIntersecting) this.active = e.target.id; });
+        }, { rootMargin: '-10% 0px -85% 0px' });
+        ['writing', 'selected-work', 'experience'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) observer.observe(el);
+        });
+    }
+}" class="flex flex-col space-y-6 md:grid md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] md:gap-16 md:space-y-0 md:items-start">
 
     <!-- Left col, top: identity + intro + in-page nav (sticky on desktop) -->
     <div class="md:col-start-1 md:row-start-1 md:sticky md:top-12 md:self-start space-y-12">
@@ -63,9 +75,9 @@
         </section>
 
         <nav class="hidden md:block space-y-2.5">
-            <a href="#" class="block font-mono text-xs text-muted hover:text-accent transition-colors duration-150">Writing &rarr;</a>
-            <a href="#selected-work" class="block font-mono text-xs text-muted hover:text-accent transition-colors duration-150">Selected work &rarr;</a>
-            <a href="#experience" class="block font-mono text-xs text-muted hover:text-accent transition-colors duration-150">Experience &rarr;</a>
+            <a href="#" @click="active = 'writing'" class="block font-mono text-xs transition-colors duration-150" :class="active === 'writing' ? 'text-accent' : 'text-muted hover:text-accent'">Writing &rarr;</a>
+            <a href="#selected-work" @click="active = 'selected-work'" class="block font-mono text-xs transition-colors duration-150" :class="active === 'selected-work' ? 'text-accent' : 'text-muted hover:text-accent'">Selected work &rarr;</a>
+            <a href="#experience" @click="active = 'experience'" class="block font-mono text-xs transition-colors duration-150" :class="active === 'experience' ? 'text-accent' : 'text-muted hover:text-accent'">Experience &rarr;</a>
         </nav>
 
         <div class="hidden md:block space-y-12">
@@ -90,8 +102,9 @@
                 </ul>
             </section>
 
-            <footer class="font-mono text-xs uppercase tracking-[0.15em] text-muted">
-                &copy; {{.Year}} Harry Day
+            <footer class="space-y-1.5">
+                <p class="font-mono text-xs uppercase tracking-[0.15em] text-muted">&copy; {{.Year}} Harry Day</p>
+                <p class="font-mono text-xs text-muted leading-relaxed">Views and writing are my own and do not reflect those of my employer.</p>
             </footer>
         </div>
 
@@ -121,7 +134,7 @@
             {{else}}
             <p class="text-muted text-sm font-mono">No posts yet.</p>
             {{end}}
-            <a href="{{.BlogRoot}}" class="block font-mono text-xs text-muted hover:text-accent transition-colors duration-150 pt-1">All posts &rarr;</a>
+            <a href="{{.BlogRoot}}" class="block font-mono text-xs text-accent pt-1">All posts &rarr;</a>
         </section>
 
         <section id="selected-work" class="space-y-4 scroll-mt-12">
@@ -129,15 +142,15 @@
             <div class="space-y-7 text-base leading-[1.65]">
                 <div>
                     <p><span class="font-semibold">Omni</span> &mdash; a platform for CS students to publish and showcase personal projects, designed to go from zero to a million users without changing the architecture. Built in Go with HTMX on the front-end, deployed to a self-hosted Kubernetes cluster.</p>
-                    <p class="font-mono text-xs uppercase tracking-[0.12em] text-muted mt-2">Go &middot; HTMX &middot; Kubernetes &mdash; 2024</p>
+                    <div class="font-mono text-xs uppercase tracking-[0.12em] mt-2 space-y-1.5"><div class="text-muted">2024</div><div class="text-accent">Go &middot; HTMX &middot; Kubernetes</div></div>
                 </div>
                 <div>
                     <p><span class="font-semibold">SongLinkr</span> &mdash; an iOS utility that converts music links between streaming platforms so you can open them wherever you actually listen. Built natively in Swift.</p>
-                    <p class="font-mono text-xs uppercase tracking-[0.12em] text-muted mt-2">Swift &middot; SwiftUI &mdash; 2021</p>
+                    <div class="font-mono text-xs uppercase tracking-[0.12em] mt-2 space-y-1.5"><div class="text-muted">2021</div><div class="text-accent">Swift &middot; SwiftUI</div></div>
                 </div>
                 <div>
                     <p><span class="font-semibold">Gentle Ghosts</span> &mdash; a generative art collection of 5,000 unique pixel-art ghosts, each built from a randomised set of traits. The generation pipeline was written in Python; the downscaling in Node.</p>
-                    <p class="font-mono text-xs uppercase tracking-[0.12em] text-muted mt-2">Python &middot; Node &mdash; 2022</p>
+                    <div class="font-mono text-xs uppercase tracking-[0.12em] mt-2 space-y-1.5"><div class="text-muted">2022</div><div class="text-accent">Python &middot; Node</div></div>
                 </div>
             </div>
         </section>
@@ -146,16 +159,20 @@
             {{template "section-label" "Experience"}}
             <div class="space-y-7 text-base leading-[1.65]">
                 <div>
-                    <p><span class="font-semibold">Novlr</span> &mdash; Software Engineer. Building and maintaining an online writing platform used by authors worldwide.</p>
-                    <p class="font-mono text-xs uppercase tracking-[0.12em] text-muted mt-2">2024 &ndash; Present</p>
+                    <p><a href="https://ubs.com" class="font-semibold hover:text-accent hover:border-b hover:border-accent transition-[color,border-color] duration-150" target="_blank" rel="noopener noreferrer">UBS</a> &mdash; Trading &amp; Execution Services Engineer. Building performant, distributed systems for a next-generation Asset Management platform.</p>
+                    <div class="font-mono text-xs uppercase tracking-[0.12em] mt-2 space-y-1.5"><div class="text-muted">2025 &ndash; Present</div><div class="text-accent">Kafka &middot; Kubernetes &middot; .NET</div></div>
                 </div>
                 <div>
-                    <p><span class="font-semibold">UBS</span> &mdash; Platform Engineer. Part of the platform team building infrastructure for asset management at scale.</p>
-                    <p class="font-mono text-xs uppercase tracking-[0.12em] text-muted mt-2">2023 &ndash; 2024</p>
+                    <p><a href="https://novlr.org" class="font-semibold hover:text-accent hover:border-b hover:border-accent transition-[color,border-color] duration-150" target="_blank" rel="noopener noreferrer">Novlr</a> &mdash; Software Engineer. Building and maintaining an online writing platform used by authors worldwide.</p>
+                    <div class="font-mono text-xs uppercase tracking-[0.12em] mt-2 space-y-1.5"><div class="text-muted">2024 &ndash; 2025</div><div class="text-accent">React &middot; MongoDB &middot; TypeScript</div></div>
                 </div>
                 <div>
-                    <p><span class="font-semibold">University of Manchester</span> &mdash; MEng Computer Science.</p>
-                    <p class="font-mono text-xs uppercase tracking-[0.12em] text-muted mt-2">2021 &ndash; 2025</p>
+                    <p><a href="https://ubs.com" class="font-semibold hover:text-accent hover:border-b hover:border-accent transition-[color,border-color] duration-150" target="_blank" rel="noopener noreferrer">UBS</a> &mdash; Industrial Placement, Asset Management Tech. Part of the platforms team, focused on developer experience — building DevOps tooling and establishing architecture patterns.</p>
+                    <div class="font-mono text-xs uppercase tracking-[0.12em] mt-2 space-y-1.5"><div class="text-muted">2023 &ndash; 2024</div><div class="text-accent">GitLab CI/CD &middot; .NET &middot; GraphQL</div></div>
+                </div>
+                <div>
+                    <p><a href="https://manchester.ac.uk" class="font-semibold hover:text-accent hover:border-b hover:border-accent transition-[color,border-color] duration-150" target="_blank" rel="noopener noreferrer">University of Manchester</a> &mdash; BSc Computer Science. Treasurer of the Motorsports Society.</p>
+                    <div class="font-mono text-xs uppercase tracking-[0.12em] mt-2 space-y-1.5"><div class="text-muted">2021 &ndash; 2025</div><div class="text-accent">C++ &middot; Python &middot; Java</div></div>
                 </div>
             </div>
         </section>
@@ -185,8 +202,9 @@
             </ul>
         </section>
 
-        <footer class="font-mono text-xs uppercase tracking-[0.15em] text-muted">
-            &copy; {{.Year}} Harry Day
+        <footer class="space-y-1.5">
+            <p class="font-mono text-xs uppercase tracking-[0.15em] text-muted">&copy; {{.Year}} Harry Day</p>
+            <p class="font-mono text-xs text-muted leading-relaxed">Views and writing are my own and do not reflect those of my employer.</p>
         </footer>
     </div>
 
