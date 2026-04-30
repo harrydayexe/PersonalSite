@@ -13,6 +13,7 @@ import (
 	"github.com/harrydayexe/GoWebUtilities/middleware"
 	"github.com/harrydayexe/GoWebUtilities/server"
 	blogcontent "github.com/harrydayexe/PersonalSite/internal/blog"
+	homecontent "github.com/harrydayexe/PersonalSite/internal/home"
 	staticcontent "github.com/harrydayexe/PersonalSite/internal/static-content"
 )
 
@@ -45,6 +46,10 @@ func main() {
 
 	templatesFS, err := fs.Sub(templateFiles, "templates")
 	if err != nil {
+		log.Fatal(err)
+	}
+
+	if err := homecontent.AddHomeRoute(ctx, mux, postsFS, templatesFS, logger); err != nil {
 		log.Fatal(err)
 	}
 

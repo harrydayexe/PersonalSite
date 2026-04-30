@@ -1,20 +1,27 @@
-port := "8080"
-log_level := "INFO"
-environment := "local"
+set dotenv-load
 
-default: run
-
+# Compile TailwindCSS
+[group('build')]
 css:
     tailwindcss -i assets/styles/input.css -o static/styles/tailwind.css --minify
 
+# Watch for changes and compile TailwindCSS
+[group('dev')]
 css-watch:
     tailwindcss -i assets/styles/input.css -o static/styles/tailwind.css --watch
 
+# Run the development server
+[group('dev')]
 dev:
     air
 
+# Compile the go binary
+[group('build')]
 build: css
     go build -o build/main .
 
+# Run the go application
+[group('dev')]
+[default]
 run: css
-    PORT={{port}} LOG_LEVEL={{log_level}} ENVIRONMENT={{environment}} go run .
+    go run .
