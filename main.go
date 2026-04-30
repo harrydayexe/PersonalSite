@@ -49,7 +49,20 @@ func main() {
 		log.Fatal(err)
 	}
 
-	if err := homecontent.AddHomeRoute(ctx, mux, postsFS, templatesFS, logger); err != nil {
+	if cfg.Environment == config.Local {
+		mux.HandleFunc("GET /reload", func(w http.ResponseWriter, r *http.Request) {
+			w.Header().Set("Content-Type", "text/event-stream")
+			w.Header().Set("Cache-Control", "no-cache")
+			w.Header().Set("Connection", "keep-alive")
+			w.WriteHeader(http.StatusOK)
+			if f, ok := w.(http.Flusher); ok {
+				f.Flush()
+			}
+			<-r.Context().Done()
+		})
+	}
+
+	if err := homecontent.AddHomeRoute(ctx, mux, postsFS, templatesFS, logger, cfg.Environment == config.Local); err != nil {
 		log.Fatal(err)
 	}
 

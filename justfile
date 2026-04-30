@@ -12,6 +12,7 @@ css-watch:
 
 # Run the development server
 [group('dev')]
+[default]
 dev:
     air
 
@@ -22,6 +23,5 @@ build: css
 
 # Run the go application
 [group('dev')]
-[default]
 run: css
     go run .

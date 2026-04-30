@@ -37,36 +37,36 @@
     <meta name="twitter:image" content="https://harryday.xyz/images/socialimage.png">
 
     <link rel="stylesheet" href="/styles/tailwind.css">
+    {{if .DevMode}}
+    <script>
+        const es = new EventSource("/reload");
+        es.onerror = () => { es.close(); setTimeout(() => location.reload(), 1500); };
+    </script>
+    {{end}}
 </head>
 <body class="bg-paper text-ink font-serif antialiased">
 <div class="mx-auto max-w-[640px] px-6 pt-24 pb-20 space-y-16">
 
     <!-- Header: name + quiet subtitle. Not the loudest thing on the page. -->
     <header>
-        <h1 class="text-base font-semibold">Harry Day</h1>
-        <p class="font-mono text-[11px] uppercase tracking-[0.15em] text-muted mt-1">
-            Software engineer &middot; Manchester, UK
+        <h1 class="text-3xl font-semibold">Harry Day</h1>
+        <p class="font-mono text-xs uppercase tracking-[0.15em] text-muted mt-1">
+            Software engineer &middot; London, UK
         </p>
     </header>
 
     <!-- Intro: the largest text on the page. The page is about what's said. -->
-    <section class="space-y-5 text-[1.3rem] leading-[1.55]">
+    <section class="space-y-5 text-xl leading-[1.55]">
         <p>I build software, mostly in Go, and currently work at <a href="https://novlr.org" class="text-accent hover:border-b hover:border-accent transition-[border-color] duration-150" target="_blank" rel="noopener noreferrer">Novlr</a>, an online platform for writers. Before that I was on the platform team at UBS, building infrastructure for asset management at scale.</p>
-        <p>This site is a place for writing. Projects and experience exist here too, but they&rsquo;re not the main event. If something I&rsquo;ve written is useful or prompts a question, <a href="mailto:contact@harryday.xyz" class="text-accent hover:border-b hover:border-accent transition-[border-color] duration-150">I&rsquo;d like to hear from you</a>.</p>
-    </section>
-
-    <!-- Now: what I'm currently working on, datestamped -->
-    <section class="space-y-4">
-        {{template "section-label" "Now"}}
-        <div class="space-y-3">
-            <p class="font-mono text-xs text-muted">April 2026</p>
-            <p class="text-[1.05rem] leading-[1.65]">Currently finishing my dissertation, rebuilding this site, and spending spare cycles reading about distributed systems. Somewhere in there I&rsquo;m also trying to get better at cooking.</p>
-        </div>
+        <p>This site is a place for writing. Projects and experience exist here too, but they&rsquo;re not the main event. If something I&rsquo;ve written is useful or prompts a question, I&rsquo;d like to hear from you.</p>
     </section>
 
     <!-- Writing: the most prominent section. Date left, title right. -->
     <section class="space-y-4">
-        {{template "section-label" "Writing"}}
+        <div class="flex items-center gap-4">
+            <a href="{{.BlogRoot}}" class="font-mono text-xs uppercase tracking-[0.15em] text-muted hover:text-accent transition-colors duration-150 shrink-0">Writing</a>
+            <hr class="flex-1 border-0 border-t border-rule m-0">
+        </div>
         {{if .Posts}}
         <ul class="divide-y divide-rule">
             {{range .Posts}}
@@ -88,18 +88,37 @@
     <!-- Selected work: inline prose. No cards, no icons, no screenshots. -->
     <section class="space-y-4">
         {{template "section-label" "Selected work"}}
-        <div class="space-y-7 text-[1.05rem] leading-[1.65]">
+        <div class="space-y-7 text-base leading-[1.65]">
             <div>
                 <p><span class="font-semibold">Omni</span> &mdash; a platform for CS students to publish and showcase personal projects, designed to go from zero to a million users without changing the architecture. Built in Go with HTMX on the front-end, deployed to a self-hosted Kubernetes cluster.</p>
-                <p class="font-mono text-[11px] uppercase tracking-[0.12em] text-muted mt-2">Go &middot; HTMX &middot; Kubernetes &mdash; 2024</p>
+                <p class="font-mono text-xs uppercase tracking-[0.12em] text-muted mt-2">Go &middot; HTMX &middot; Kubernetes &mdash; 2024</p>
             </div>
             <div>
                 <p><span class="font-semibold">SongLinkr</span> &mdash; an iOS utility that converts music links between streaming platforms so you can open them wherever you actually listen. Built natively in Swift.</p>
-                <p class="font-mono text-[11px] uppercase tracking-[0.12em] text-muted mt-2">Swift &middot; SwiftUI &mdash; 2021</p>
+                <p class="font-mono text-xs uppercase tracking-[0.12em] text-muted mt-2">Swift &middot; SwiftUI &mdash; 2021</p>
             </div>
             <div>
                 <p><span class="font-semibold">Gentle Ghosts</span> &mdash; a generative art collection of 5,000 unique pixel-art ghosts, each built from a randomised set of traits. The generation pipeline was written in Python; the downscaling in Node.</p>
-                <p class="font-mono text-[11px] uppercase tracking-[0.12em] text-muted mt-2">Python &middot; Node &mdash; 2022</p>
+                <p class="font-mono text-xs uppercase tracking-[0.12em] text-muted mt-2">Python &middot; Node &mdash; 2022</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience: brief CV summary -->
+    <section class="space-y-4">
+        {{template "section-label" "Experience"}}
+        <div class="space-y-7 text-base leading-[1.65]">
+            <div>
+                <p><span class="font-semibold">Novlr</span> &mdash; Software Engineer. Building and maintaining an online writing platform used by authors worldwide.</p>
+                <p class="font-mono text-xs uppercase tracking-[0.12em] text-muted mt-2">2024 &ndash; Present</p>
+            </div>
+            <div>
+                <p><span class="font-semibold">UBS</span> &mdash; Platform Engineer. Part of the platform team building infrastructure for asset management at scale.</p>
+                <p class="font-mono text-xs uppercase tracking-[0.12em] text-muted mt-2">2023 &ndash; 2024</p>
+            </div>
+            <div>
+                <p><span class="font-semibold">University of Manchester</span> &mdash; MEng Computer Science.</p>
+                <p class="font-mono text-xs uppercase tracking-[0.12em] text-muted mt-2">2021 &ndash; 2025</p>
             </div>
         </div>
     </section>
@@ -123,15 +142,12 @@
                    class="font-mono text-xs text-muted hover:text-accent transition-colors duration-150"
                    target="_blank" rel="noopener noreferrer">x.com/harrydayexe</a>
             </li>
-            <li>
-                <a href="mailto:contact@harryday.xyz"
-                   class="font-mono text-xs text-muted hover:text-accent transition-colors duration-150">contact@harryday.xyz</a>
-            </li>
+
         </ul>
     </section>
 
     <!-- Footer: minimal copyright line -->
-    <footer class="font-mono text-[11px] uppercase tracking-[0.15em] text-muted">
+    <footer class="font-mono text-xs uppercase tracking-[0.15em] text-muted">
         &copy; {{.Year}} Harry Day
     </footer>
 
@@ -141,7 +157,7 @@
 
 {{define "section-label"}}
 <div class="flex items-center gap-4">
-    <h2 class="font-mono text-[11px] uppercase tracking-[0.15em] text-muted shrink-0">{{.}}</h2>
+    <h2 class="font-mono text-xs uppercase tracking-[0.15em] text-muted shrink-0">{{.}}</h2>
     <hr class="flex-1 border-0 border-t border-rule m-0">
 </div>
 {{end}}
