@@ -1,20 +1,22 @@
 {{define "post-card"}}
-<article class="border-b border-gray-100 py-7 last:border-0">
-    <p class="text-sm text-gray-400 mb-2">
-        <time datetime="{{.ShortDate}}">{{.FormattedDate}}</time>
-    </p>
-    <h3 class="font-mono font-bold text-xl mb-2">
-        <a href="{{.BlogRoot}}posts/{{.Slug}}" class="text-gray-900 hover:text-accent transition-colors">{{.Title}}</a>
-    </h3>
-    {{if .Description}}
-    <p class="text-gray-600 mb-3">{{.Description}}</p>
-    {{end}}
+<div class="py-3.5 group">
+    <a href="{{.BlogRoot}}posts/{{.Slug}}" class="block">
+        <div class="flex gap-6 items-start">
+            <time datetime="{{.ShortDate}}" class="font-mono text-xs text-muted shrink-0 w-24 pt-0.5">{{.ShortDate}}</time>
+            <div>
+                <span class="text-base text-ink group-hover:text-accent transition-colors duration-150">{{.Title}}</span>
+                {{if .Description}}
+                <p class="text-base text-muted leading-[1.55] mt-1">{{.Description}}</p>
+                {{end}}
+            </div>
+        </div>
+    </a>
     {{if .Tags}}
-    <div class="flex flex-wrap gap-2 mt-3">
+    <div class="flex flex-wrap gap-2 mt-2 pl-[7.5rem]">
         {{range .Tags}}
-        <a href="{{$.BlogRoot}}tags/{{.}}" class="inline-block border-2 border-accent text-accent text-sm px-3 py-0.5 rounded-full hover:bg-accent hover:text-white transition-colors">#{{.}}</a>
+        <a href="{{$.BlogRoot}}tags/{{.}}" class="font-mono text-xs uppercase tracking-[0.1em] border border-rule text-muted px-2 py-0.5 rounded-full hover:border-accent hover:text-accent transition-colors">#{{.}}</a>
         {{end}}
     </div>
     {{end}}
-</article>
+</div>
 {{end}}

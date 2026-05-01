@@ -1,15 +1,19 @@
 {{define "footer"}}
-<footer class="mt-auto border-t border-gray-100 py-8 text-center">
-    <div class="flex justify-center flex-wrap gap-6 mb-2">
-        <a href="https://github.com/harrydayexe" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:underline font-medium text-sm">Github</a>
-        <a href="https://linkedin.com/in/harrydayexe" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:underline font-medium text-sm">LinkedIn</a>
-        <a href="https://twitter.com/harrydayexe" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:underline font-medium text-sm">Twitter</a>
-        <a href="mailto:contact@harryday.xyz" class="text-gray-400 hover:underline font-medium text-sm">Contact</a>
+<footer class="max-w-[640px] mx-auto px-6 pt-16 pb-20 space-y-10">
+    <section class="space-y-4">
+        <div class="flex items-center gap-4">
+            <h2 class="font-mono text-xs uppercase tracking-[0.15em] text-muted shrink-0">Elsewhere</h2>
+            <hr class="flex-1 border-0 border-t border-rule m-0">
+        </div>
+        <ul class="space-y-2.5">
+            <li><a href="https://github.com/harrydayexe" class="font-mono text-xs text-muted hover:text-accent transition-colors duration-150" target="_blank" rel="noopener noreferrer">github.com/harrydayexe</a></li>
+            <li><a href="https://linkedin.com/in/harrydayexe" class="font-mono text-xs text-muted hover:text-accent transition-colors duration-150" target="_blank" rel="noopener noreferrer">linkedin.com/in/harrydayexe</a></li>
+            <li><a href="https://twitter.com/harrydayexe" class="font-mono text-xs text-muted hover:text-accent transition-colors duration-150" target="_blank" rel="noopener noreferrer">x.com/harrydayexe</a></li>
+        </ul>
+    </section>
+    <div class="space-y-1.5">
+        <p class="font-mono text-xs uppercase tracking-[0.15em] text-muted">&copy; {{.Year}} Harry Day</p>
+        <p class="font-mono text-xs text-muted leading-relaxed">Views and writing are my own and do not reflect those of my employer.</p>
     </div>
-    <div class="flex justify-center flex-wrap gap-6 mb-4">
-        <a href="/" class="text-gray-400 hover:underline font-medium text-sm">harryday.xyz</a>
-        <a href="{{.BlogRoot}}" class="text-gray-400 hover:underline font-medium text-sm">Blog</a>
-    </div>
-    <p class="text-gray-400 text-sm">Copyright &copy; {{.Year}} Harry Day. All rights reserved.</p>
 </footer>
 {{end}}

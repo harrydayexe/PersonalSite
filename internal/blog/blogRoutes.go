@@ -10,6 +10,7 @@ import (
 
 	goblogconfig "github.com/harrydayexe/GoBlog/v2/pkg/config"
 	"github.com/harrydayexe/GoBlog/v2/pkg/generator"
+	goblogparser "github.com/harrydayexe/GoBlog/v2/pkg/parser"
 	goblogserver "github.com/harrydayexe/GoBlog/v2/pkg/server"
 )
 
@@ -33,6 +34,10 @@ func AddBlogRoutes(ctx context.Context, mux *http.ServeMux, posts fs.FS, templat
 		goblogconfig.WithBaseOption(goblogconfig.WithBlogRoot(blogRoot)),
 		goblogconfig.WithSiteTitle("Harry Day{}"),
 	)
+	gen.ParserConfig = goblogparser.Config{
+		EnableCodeHighlighting: true,
+		CodeHighlightingStyle:  "tango",
+	}
 
 	logger.DebugContext(ctx, "generator created", slog.String("config", gen.String()))
 
