@@ -1,23 +1,26 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr" class="h-full">
+<html lang="en" dir="ltr">
 {{template "head" .}}
-<body class="min-h-full flex flex-col bg-white text-gray-900 font-sans">
+<body class="bg-paper text-ink font-serif antialiased">
     {{template "header" .}}
-    <main class="flex-1 max-w-[900px] w-full mx-auto px-5 py-10">
-        <h1 class="font-mono font-bold text-4xl text-gray-900 mb-2">Blog</h1>
-        <p class="text-gray-400 mb-8">{{.TotalPosts}} {{if eq .TotalPosts 1}}post{{else}}posts{{end}} published</p>
+    <main class="max-w-[640px] mx-auto px-6 pt-12 pb-4">
+        <div class="space-y-8">
+            <div class="flex items-center gap-4">
+                <h1 class="font-mono text-xs uppercase tracking-[0.15em] text-muted shrink-0">Writing</h1>
+                <hr class="flex-1 border-0 border-t border-rule m-0">
+            </div>
+            <p class="font-mono text-xs text-muted -mt-4">{{.TotalPosts}} {{if eq .TotalPosts 1}}post{{else}}posts{{end}}</p>
 
-        {{if .Posts}}
-        <div>
-            {{range .Posts}}
-            {{template "post-card" .}}
+            {{if .Posts}}
+            <ul class="divide-y divide-rule">
+                {{range .Posts}}
+                {{template "post-card" .}}
+                {{end}}
+            </ul>
+            {{else}}
+            <p class="font-mono text-xs text-muted">No posts yet. Check back soon.</p>
             {{end}}
         </div>
-        {{else}}
-        <div class="text-center py-16 text-gray-400">
-            <p>No posts yet. Check back soon.</p>
-        </div>
-        {{end}}
     </main>
     {{template "footer" .}}
 </body>
