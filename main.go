@@ -13,6 +13,7 @@ import (
 	"github.com/harrydayexe/GoWebUtilities/middleware"
 	"github.com/harrydayexe/GoWebUtilities/server"
 	blogcontent "github.com/harrydayexe/PersonalSite/internal/blog"
+	homecontent "github.com/harrydayexe/PersonalSite/internal/home"
 	staticcontent "github.com/harrydayexe/PersonalSite/internal/static-content"
 )
 
@@ -45,6 +46,23 @@ func main() {
 
 	templatesFS, err := fs.Sub(templateFiles, "templates")
 	if err != nil {
+		log.Fatal(err)
+	}
+
+	if cfg.Environment == config.Local {
+		mux.HandleFunc("GET /reload", func(w http.ResponseWriter, r *http.Request) {
+			w.Header().Set("Content-Type", "text/event-stream")
+			w.Header().Set("Cache-Control", "no-cache")
+			w.Header().Set("Connection", "keep-alive")
+			w.WriteHeader(http.StatusOK)
+			if f, ok := w.(http.Flusher); ok {
+				f.Flush()
+			}
+			<-r.Context().Done()
+		})
+	}
+
+	if err := homecontent.AddHomeRoute(ctx, mux, postsFS, templatesFS, logger, cfg.Environment == config.Local); err != nil {
 		log.Fatal(err)
 	}
 

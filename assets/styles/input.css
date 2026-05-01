@@ -3,15 +3,45 @@
 @source "../../templates/**/*.tmpl";
 @source "../../posts/**/*.md";
 
+/* Warm palette — light mode defaults, dark mode via media query */
+:root {
+    --paper:      #f5f1ea;
+    --paper-deep: #ede7d9;
+    --ink:        #1a1815;
+    --muted:      #6e695f;
+    --rule:       #e0d9c8;
+    --accent:     #ff9400;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --paper:      #14130f;
+        --paper-deep: #1f1c17;
+        --ink:        #e8e3d6;
+        --muted:      #918a7a;
+        --rule:       #2c2823;
+        --accent:     #c4823a;
+    }
+}
+
 @theme {
-    --color-accent: #FF9400;
-    --font-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
-                 "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace",
-                 "Source Code Pro", "Fira Mono", "Droid Sans Mono",
-                 "Courier New", monospace;
+    --color-paper:      var(--paper);
+    --color-paper-deep: var(--paper-deep);
+    --color-ink:        var(--ink);
+    --color-muted:      var(--muted);
+    --color-rule:       var(--rule);
+    --color-accent:     var(--accent);
+
+    --font-serif: ui-serif, Charter, "Iowan Old Style", "Apple Garamond",
+                  "Hoefler Text", Georgia, "Times New Roman", serif;
+    --font-mono:  ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
+                  "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace",
+                  "Source Code Pro", "Fira Mono", "Droid Sans Mono",
+                  "Courier New", monospace;
 }
 
 @layer base {
-    ::selection { background: #FF9400; color: #fff; }
-    ::-moz-selection { background: #FF9400; color: #fff; }
+    html { color-scheme: light dark; scroll-behavior: smooth; }
+    ::selection { background: var(--accent); color: var(--paper); }
+    ::-moz-selection { background: var(--accent); color: var(--paper); }
 }

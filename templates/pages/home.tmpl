@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <title>Harry Day</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Harry Day — software engineer based in Manchester.">
+    <meta name="robots" content="index, follow">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="language" content="English">
+    <meta name="author" content="Harry Day">
+    <meta name="theme-color" content="#FF9400">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+
+    <!-- Open Graph -->
+    <meta property="og:site_name" content="Harry Day">
+    <meta property="og:type" content="profile">
+    <meta property="og:title" content="Harry Day">
+    <meta property="og:url" content="https://harryday.xyz">
+    <meta property="og:image" content="https://harryday.xyz/images/socialimage.png">
+    <meta property="og:description" content="Harry Day — software engineer based in Manchester.">
+    <meta property="profile:first_name" content="Harry">
+    <meta property="profile:last_name" content="Day">
+    <meta property="profile:username" content="harrydayexe">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@harrydayexe">
+    <meta name="twitter:title" content="Harry Day">
+    <meta name="twitter:description" content="Harry Day — software engineer based in Manchester.">
+    <meta name="twitter:image" content="https://harryday.xyz/images/socialimage.png">
+
+    <link rel="stylesheet" href="/styles/tailwind.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    {{if .DevMode}}
+    <script>
+        const es = new EventSource("/reload");
+        es.onerror = () => {es.close(); setTimeout(() => location.reload(), 1500);};
+    </script>
+    {{end}}
+</head>
+
+<body class="bg-paper text-ink font-serif antialiased">
+    <div class="mx-auto max-w-[640px] md:max-w-[1800px] px-6 md:px-20 pt-24 pb-20">
+        <div x-data="{
+    active: 'writing',
+    init() {
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(e => { if (e.isIntersecting) this.active = e.target.id; });
+        }, { rootMargin: '-10% 0px -85% 0px' });
+        ['writing', 'selected-work', 'experience'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) observer.observe(el);
+        });
+    }
+}" class="flex flex-col space-y-6 md:grid md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] md:gap-16 md:space-y-0 md:items-start">
+
+            <!-- Left col, top: identity + intro + in-page nav (sticky on desktop) -->
+            <div class="md:col-start-1 md:row-start-1 md:sticky md:top-12 md:self-start space-y-12">
+
+                <header>
+                    <h1 class="text-3xl font-semibold">Harry Day</h1>
+                    <p class="font-mono text-xs uppercase tracking-[0.15em] text-muted mt-1">
+                        Software engineer &middot; London, UK
+                    </p>
+                </header>
+
+                <section class="space-y-5 text-xl leading-[1.55]">
+                    <p>
+                        I build software to solve problems. Interested in highly performant, and distributed systems.
+                        Currently working at UBS building a next-generation Asset Management platform.
+                    </p>
+                </section>
+
+                <nav class="hidden md:block space-y-2.5">
+                    <a href="#" @click="active = 'writing'"
+                        class="block font-mono text-xs transition-colors duration-150"
+                        :class="active === 'writing' ? 'text-accent' : 'text-muted hover:text-accent'">Writing
+                        &rarr;</a>
+                    <a href="#selected-work" @click="active = 'selected-work'"
+                        class="block font-mono text-xs transition-colors duration-150"
+                        :class="active === 'selected-work' ? 'text-accent' : 'text-muted hover:text-accent'">Personal
+                        Projects &rarr;</a>
+                    <a href="#experience" @click="active = 'experience'"
+                        class="block font-mono text-xs transition-colors duration-150"
+                        :class="active === 'experience' ? 'text-accent' : 'text-muted hover:text-accent'">Experience
+                        &rarr;</a>
+                </nav>
+
+                <div class="hidden md:block space-y-12">
+                    <section class="space-y-4">
+                        {{template "section-label" "Elsewhere"}}
+                        <ul class="space-y-2.5">
+                            <li>
+                                <a href="https://github.com/harrydayexe"
+                                    class="font-mono text-xs text-muted hover:text-accent transition-colors duration-150"
+                                    target="_blank" rel="noopener noreferrer">github.com/harrydayexe</a>
+                            </li>
+                            <li>
+                                <a href="https://linkedin.com/in/harrydayexe"
+                                    class="font-mono text-xs text-muted hover:text-accent transition-colors duration-150"
+                                    target="_blank" rel="noopener noreferrer">linkedin.com/in/harrydayexe</a>
+                            </li>
+                            <li>
+                                <a href="https://twitter.com/harrydayexe"
+                                    class="font-mono text-xs text-muted hover:text-accent transition-colors duration-150"
+                                    target="_blank" rel="noopener noreferrer">x.com/harrydayexe</a>
+                            </li>
+                        </ul>
+                    </section>
+
+                    <footer class="space-y-1.5">
+                        <p class="font-mono text-xs uppercase tracking-[0.15em] text-muted">&copy; {{.Year}} Harry Day
+                        </p>
+                        <p class="font-mono text-xs text-muted leading-relaxed">Views and writing are my own and do not
+                            reflect those of my employer.</p>
+                    </footer>
+                </div>
+
+            </div>
+
+            <!-- Right col: Writing, Personal projects, Experience -->
+            <div class="md:col-start-2 md:row-start-1 space-y-16 md:pt-10">
+
+                <section id="writing" class="space-y-4 scroll-mt-12">
+                    <div class="flex items-center gap-4">
+                        <a href="{{.BlogRoot}}"
+                            class="font-mono text-xs uppercase tracking-[0.15em] text-muted hover:text-accent transition-colors duration-150 shrink-0">Writing</a>
+                        <hr class="flex-1 border-0 border-t border-rule m-0">
+                    </div>
+                    {{if .Posts}}
+                    <ul class="divide-y divide-rule">
+                        {{range $i, $post := .Posts}}
+                        <li class="{{if ge $i 5}}hidden md:block{{end}}">
+                            <a href="{{$.BlogRoot}}posts/{{$post.Slug}}"
+                                class="grid grid-cols-[6rem_1fr] gap-6 py-3.5 group">
+                                <time datetime="{{$post.ShortDate}}"
+                                    class="font-mono text-xs text-muted pt-px shrink-0">{{$post.ShortDate}}</time>
+                                <span
+                                    class="text-ink group-hover:text-accent transition-colors duration-150">{{$post.Title}}</span>
+                            </a>
+                        </li>
+                        {{end}}
+                    </ul>
+                    {{else}}
+                    <p class="text-muted text-sm font-mono">No posts yet.</p>
+                    {{end}}
+                    <a href="{{.BlogRoot}}" class="block font-mono text-xs text-accent pt-1">All posts &rarr;</a>
+                </section>
+
+                <section id="selected-work" class="space-y-4 scroll-mt-12">
+                    {{template "section-label" "Personal projects"}}
+                    <div class="space-y-7 text-base leading-[1.65]">
+                        <div>
+                            <p>
+                                <a href="https://apps.apple.com/us/app/songlinkr/id1561986085"
+                                    class="font-semibold hover:text-accent hover:border-b hover:border-accent transition-[color,border-color] duration-150"
+                                    target="_blank" rel="noopener noreferrer">SongLinkr</a> &dash; An iOS application
+                                that converts
+                                music
+                                links between streaming platforms so you can open them wherever you actually listen.
+                                Built natively in Swift using SwiftUI. Achieved over 4000 downloads through word of
+                                mouth advertisement.
+                            </p>
+                            <div class="font-mono text-xs uppercase tracking-[0.12em] mt-2 space-y-1.5">
+                                <div class="text-muted">2021 &ndash; Present</div>
+                                <div class="text-accent">Swift &middot; SwiftUI</div>
+                            </div>
+                        </div>
+                        <div id="omni">
+                            <p>
+                                <a href="https://github.com/harrydayexe/Omni" class="font-semibold hover:text-accent hover:border-b hover:border-accent transition-[color,border-color] duration-150" target="_blank" rel="noopener noreferrer">Omni</a> &dash; a proof-of-concept platform for Computer
+                                Science students and junior engineers to showcase personal projects.
+                                Architected to scale from zero to a million users globally overnight, through the magic
+                                of Kubernetes.
+                                Built using multiple Go microservices, serving a beautiful front-end using HTMX,
+                                TailwindCSS and AlpineJS; backed by a data layer designed for sharding from the start.
+                            </p>
+                            <div class="font-mono text-xs uppercase tracking-[0.12em] mt-2 space-y-1.5">
+                                <div class="text-muted">2024</div>
+                                <div class="text-accent">Go &middot; HTMX &middot; Kubernetes</div>
+                            </div>
+                        </div>
+                        <div>
+                            <p>
+                                <a href="https://github.com/Gentle-Ghosts/images" class="font-semibold hover:text-accent hover:border-b hover:border-accent transition-[color,border-color] duration-150" target="_blank" rel="noopener noreferrer">Gentle Ghosts</a> &dash; a generative art collection of
+                                5,000 unique pixel-art ghosts, each built from a randomised set of traits.
+                                The generation pipeline was written in Python; the downscaling in Node.
+                            </p>
+                            <div class="font-mono text-xs uppercase tracking-[0.12em] mt-2 space-y-1.5">
+                                <div class="text-muted">2022</div>
+                                <div class="text-accent">Python &middot; Node</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="experience" class="space-y-4 scroll-mt-12 md:min-h-[calc(100vh-8rem)]">
+                    {{template "section-label" "Experience"}}
+                    <div class="space-y-7 text-base leading-[1.65]">
+                        <div>
+                            <p>
+                                <a href="https://ubs.com"
+                                    class="font-semibold hover:text-accent hover:border-b hover:border-accent transition-[color,border-color] duration-150"
+                                    target="_blank" rel="noopener noreferrer">UBS</a> &dash; Trading &amp; Execution
+                                Services Software Engineer.
+                                Building performant, distributed systems for a scalable, digitial and highly-automated
+                                cross-asset portfolio management and trading platform which allows Investment
+                                professionals to operate efficiently.
+                                Maintaining and iterating on backend microservices which power front-to-back order
+                                management and pre-trade compliance.
+                                Collaborating with stakeholders, QA testers and other developers, ensuring platform
+                                stability and reducing risk.
+                            </p>
+                            <div class="font-mono text-xs uppercase tracking-[0.12em] mt-2 space-y-1.5">
+                                <div class="text-muted">2025 &ndash; Present</div>
+                                <div class="text-accent">Kafka &middot; Kubernetes &middot; .NET</div>
+                            </div>
+                        </div>
+                        <div>
+                            <p>
+                                <a href="https://novlr.org"
+                                    class="font-semibold hover:text-accent hover:border-b hover:border-accent transition-[color,border-color] duration-150"
+                                    target="_blank" rel="noopener noreferrer">Novlr</a> &dash; Software Engineer.
+                                Maintained and supported an online writing platform used by hundreds of thousands of
+                                authors worldwide.
+                                Rewrote and modernised the platform with a small team of UX designers, engineers and
+                                writers to enhance stability and enable the development of exciting new features.
+                            </p>
+                            <div class="font-mono text-xs uppercase tracking-[0.12em] mt-2 space-y-1.5">
+                                <div class="text-muted">2024 &ndash; 2025</div>
+                                <div class="text-accent">React &middot; MongoDB &middot; TypeScript</div>
+                            </div>
+                        </div>
+                        <div>
+                            <p>
+                                <a href="https://ubs.com"
+                                    class="font-semibold hover:text-accent hover:border-b hover:border-accent transition-[color,border-color] duration-150"
+                                    target="_blank" rel="noopener noreferrer">UBS</a> &dash; Industrial Placement, Asset
+                                Management Technology.
+                                Focused on developer experience and architecture as part of the platforms team.
+                                Estabilished shared GitLab CI/CD pipelines which enable consistent, reproducible build
+                                processes and ensure a Secure Build Chain (SBC).
+                                Wrote inner-source libraries used by production-critical applications, standardising the
+                                ways that applications interact with Kafka.
+                            </p>
+                            <div class="font-mono text-xs uppercase tracking-[0.12em] mt-2 space-y-1.5">
+                                <div class="text-muted">2023 &ndash; 2024</div>
+                                <div class="text-accent">GitLab CI/CD &middot; .NET &middot; GraphQL</div>
+                            </div>
+                        </div>
+                        <div>
+                            <p>
+                                <a href="https://manchester.ac.uk"
+                                    class="font-semibold hover:text-accent hover:border-b hover:border-accent transition-[color,border-color] duration-150"
+                                    target="_blank" rel="noopener noreferrer">University of Manchester</a> &dash; BSc
+                                Computer Science.
+                                Treasurer of the Motorsports Society.
+                                Studied the fundamentals of Computer Science and Software Engineering with a focus in my
+                                final year on distributed systems.
+                                Authored a dissertation titled "Building a Social Media Platform Capable of Scaling to a
+                                Million Users Overnight", exploring the architecture behind social networks and how to
+                                handle rapid user growth.
+                                Produced a proof-of-concept platform, <a href="#omni"
+                                    class="hover:text-accent hover:border-b hover:border-accent transition-[color,border-color] duration-150">Omni</a>,
+                                to explore the ideas in my dissertation.
+                            </p>
+                            <div class="font-mono text-xs uppercase tracking-[0.12em] mt-2 space-y-1.5">
+                                <div class="text-muted">2021 &ndash; 2025</div>
+                                <div class="text-accent">C++ &middot; Python &middot; Java</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+
+            <!-- Mobile-only: elsewhere + footer at bottom of page -->
+            <div class="md:hidden space-y-10">
+                <section class="space-y-4">
+                    {{template "section-label" "Elsewhere"}}
+                    <ul class="space-y-2.5">
+                        <li>
+                            <a href="https://github.com/harrydayexe"
+                                class="font-mono text-xs text-muted hover:text-accent transition-colors duration-150"
+                                target="_blank" rel="noopener noreferrer">github.com/harrydayexe</a>
+                        </li>
+                        <li>
+                            <a href="https://linkedin.com/in/harrydayexe"
+                                class="font-mono text-xs text-muted hover:text-accent transition-colors duration-150"
+                                target="_blank" rel="noopener noreferrer">linkedin.com/in/harrydayexe</a>
+                        </li>
+                        <li>
+                            <a href="https://twitter.com/harrydayexe"
+                                class="font-mono text-xs text-muted hover:text-accent transition-colors duration-150"
+                                target="_blank" rel="noopener noreferrer">x.com/harrydayexe</a>
+                        </li>
+                    </ul>
+                </section>
+
+                <footer class="space-y-1.5">
+                    <p class="font-mono text-xs uppercase tracking-[0.15em] text-muted">&copy; {{.Year}} Harry Day</p>
+                    <p class="font-mono text-xs text-muted leading-relaxed">Views and writing are my own and do not
+                        reflect those of my employer.</p>
+                </footer>
+            </div>
+
+        </div>
+    </div>
+</body>
+
+</html>
+
+{{define "section-label"}}
+<div class="flex items-center gap-4">
+    <h2 class="font-mono text-xs uppercase tracking-[0.15em] text-muted shrink-0">{{.}}</h2>
+    <hr class="flex-1 border-0 border-t border-rule m-0">
+</div>
+{{end}}
