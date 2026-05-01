@@ -73,7 +73,9 @@
                 </header>
 
                 <section class="space-y-5 text-xl leading-[1.55]">
-                    <p>I build software. Currently working at UBS building a next-generation Asset Management platform.
+                    <p>
+                        I build software to solve problems. Interested in highly performant, and distributed systems.
+                        Currently working at UBS building a next-generation Asset Management platform.
                     </p>
                 </section>
 
@@ -84,8 +86,8 @@
                         &rarr;</a>
                     <a href="#selected-work" @click="active = 'selected-work'"
                         class="block font-mono text-xs transition-colors duration-150"
-                        :class="active === 'selected-work' ? 'text-accent' : 'text-muted hover:text-accent'">Selected
-                        work &rarr;</a>
+                        :class="active === 'selected-work' ? 'text-accent' : 'text-muted hover:text-accent'">Personal
+                        Projects &rarr;</a>
                     <a href="#experience" @click="active = 'experience'"
                         class="block font-mono text-xs transition-colors duration-150"
                         :class="active === 'experience' ? 'text-accent' : 'text-muted hover:text-accent'">Experience
@@ -124,7 +126,7 @@
 
             </div>
 
-            <!-- Right col: Writing, Selected work, Experience -->
+            <!-- Right col: Writing, Personal projects, Experience -->
             <div class="md:col-start-2 md:row-start-1 space-y-16 md:pt-10">
 
                 <section id="writing" class="space-y-4 scroll-mt-12">
@@ -154,31 +156,44 @@
                 </section>
 
                 <section id="selected-work" class="space-y-4 scroll-mt-12">
-                    {{template "section-label" "Selected work"}}
+                    {{template "section-label" "Personal projects"}}
                     <div class="space-y-7 text-base leading-[1.65]">
                         <div>
-                            <p><span class="font-semibold">Omni</span> &dash; a platform for CS students to publish and
-                                showcase personal projects, designed to go from zero to a million users without changing
-                                the architecture. Built in Go with HTMX on the front-end, deployed to a self-hosted
-                                Kubernetes cluster.</p>
+                            <p>
+                                <a href="https://apps.apple.com/us/app/songlinkr/id1561986085"
+                                    class="font-semibold hover:text-accent hover:border-b hover:border-accent transition-[color,border-color] duration-150"
+                                    target="_blank" rel="noopener noreferrer">SongLinkr</a> &dash; An iOS application
+                                that converts
+                                music
+                                links between streaming platforms so you can open them wherever you actually listen.
+                                Built natively in Swift using SwiftUI. Achieved over 4000 downloads through word of
+                                mouth advertisement.
+                            </p>
+                            <div class="font-mono text-xs uppercase tracking-[0.12em] mt-2 space-y-1.5">
+                                <div class="text-muted">2021 &ndash; Present</div>
+                                <div class="text-accent">Swift &middot; SwiftUI</div>
+                            </div>
+                        </div>
+                        <div id="omni">
+                            <p>
+                                <a href="https://github.com/harrydayexe/Omni" class="font-semibold hover:text-accent hover:border-b hover:border-accent transition-[color,border-color] duration-150" target="_blank" rel="noopener noreferrer">Omni</a> &dash; a proof-of-concept platform for Computer
+                                Science students and junior engineers to showcase personal projects.
+                                Architected to scale from zero to a million users globally overnight, through the magic
+                                of Kubernetes.
+                                Built using multiple Go microservices, serving a beautiful front-end using HTMX,
+                                TailwindCSS and AlpineJS; backed by a data layer designed for sharding from the start.
+                            </p>
                             <div class="font-mono text-xs uppercase tracking-[0.12em] mt-2 space-y-1.5">
                                 <div class="text-muted">2024</div>
                                 <div class="text-accent">Go &middot; HTMX &middot; Kubernetes</div>
                             </div>
                         </div>
                         <div>
-                            <p><span class="font-semibold">SongLinkr</span> &dash; an iOS utility that converts music
-                                links between streaming platforms so you can open them wherever you actually listen.
-                                Built natively in Swift.</p>
-                            <div class="font-mono text-xs uppercase tracking-[0.12em] mt-2 space-y-1.5">
-                                <div class="text-muted">2021</div>
-                                <div class="text-accent">Swift &middot; SwiftUI</div>
-                            </div>
-                        </div>
-                        <div>
-                            <p><span class="font-semibold">Gentle Ghosts</span> &dash; a generative art collection of
-                                5,000 unique pixel-art ghosts, each built from a randomised set of traits. The
-                                generation pipeline was written in Python; the downscaling in Node.</p>
+                            <p>
+                                <a href="https://github.com/Gentle-Ghosts/images" class="font-semibold hover:text-accent hover:border-b hover:border-accent transition-[color,border-color] duration-150" target="_blank" rel="noopener noreferrer">Gentle Ghosts</a> &dash; a generative art collection of
+                                5,000 unique pixel-art ghosts, each built from a randomised set of traits.
+                                The generation pipeline was written in Python; the downscaling in Node.
+                            </p>
                             <div class="font-mono text-xs uppercase tracking-[0.12em] mt-2 space-y-1.5">
                                 <div class="text-muted">2022</div>
                                 <div class="text-accent">Python &middot; Node</div>
@@ -253,6 +268,9 @@
                                 Authored a dissertation titled "Building a Social Media Platform Capable of Scaling to a
                                 Million Users Overnight", exploring the architecture behind social networks and how to
                                 handle rapid user growth.
+                                Produced a proof-of-concept platform, <a href="#omni"
+                                    class="hover:text-accent hover:border-b hover:border-accent transition-[color,border-color] duration-150">Omni</a>,
+                                to explore the ideas in my dissertation.
                             </p>
                             <div class="font-mono text-xs uppercase tracking-[0.12em] mt-2 space-y-1.5">
                                 <div class="text-muted">2021 &ndash; 2025</div>
