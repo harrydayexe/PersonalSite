@@ -33,5 +33,11 @@
     <meta name="twitter:image" content="https://harryday.xyz/images/socialimage.png">
 
     <link rel="stylesheet" href="/styles/tailwind.css">
+    {{if eq .Environment "local"}}
+    <script>
+        const es = new EventSource("/reload");
+        es.onerror = () => {es.close(); setTimeout(() => location.reload(), 1500);};
+    </script>
+    {{end}}
 </head>
 {{end}}

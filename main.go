@@ -62,11 +62,11 @@ func main() {
 		})
 	}
 
-	if err := homecontent.AddHomeRoute(ctx, mux, postsFS, templatesFS, logger, cfg.Environment == config.Local); err != nil {
+	if err := homecontent.AddHomeRoute(ctx, mux, postsFS, templatesFS, logger, string(cfg.Environment)); err != nil {
 		log.Fatal(err)
 	}
 
-	if err := blogcontent.AddBlogRoutes(ctx, mux, postsFS, templatesFS, logger); err != nil {
+	if err := blogcontent.AddBlogRoutes(ctx, mux, postsFS, templatesFS, logger, string(cfg.Environment)); err != nil {
 		log.Fatal(err)
 	}
 

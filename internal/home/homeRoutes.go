@@ -16,16 +16,16 @@ import (
 const blogRoot = "/blog/"
 
 type homePageData struct {
-	Posts    models.PostList
-	Year     int
-	BlogRoot string
-	DevMode  bool
+	Posts       models.PostList
+	Year        int
+	BlogRoot    string
+	Environment string
 }
 
 // AddHomeRoute registers the GET /{$} handler for the site homepage on the provided mux.
 // It parses posts once at startup using GoBlog's parser and serves the home.tmpl template.
 // It is not safe for concurrent use during setup, but the resulting handler is.
-func AddHomeRoute(ctx context.Context, mux *http.ServeMux, postsFS fs.FS, templatesFS fs.FS, logger *slog.Logger, devMode bool) error {
+func AddHomeRoute(ctx context.Context, mux *http.ServeMux, postsFS fs.FS, templatesFS fs.FS, logger *slog.Logger, environment string) error {
 	tmpl, err := template.ParseFS(templatesFS, "pages/home.tmpl")
 	if err != nil {
 		return err
@@ -43,10 +43,10 @@ func AddHomeRoute(ctx context.Context, mux *http.ServeMux, postsFS fs.FS, templa
 	mux.HandleFunc("GET /{$}", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 		if err := tmpl.Execute(w, homePageData{
-			Posts:    posts,
-			Year:     time.Now().Year(),
-			BlogRoot: blogRoot,
-			DevMode:  devMode,
+			Posts:       posts,
+			Year:        time.Now().Year(),
+			BlogRoot:    blogRoot,
+			Environment: environment,
 		}); err != nil {
 			logger.ErrorContext(r.Context(), "failed to render homepage", slog.String("error", err.Error()))
 		}

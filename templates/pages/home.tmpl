@@ -39,7 +39,7 @@
 
     <link rel="stylesheet" href="/styles/tailwind.css">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    {{if .DevMode}}
+    {{if eq .Environment "local"}}
     <script>
         const es = new EventSource("/reload");
         es.onerror = () => {es.close(); setTimeout(() => location.reload(), 1500);};
