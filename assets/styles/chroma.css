@@ -1,0 +1,183 @@
+/* ===================================================================
+   Chroma syntax highlighting — two themes via CSS variables
+   Tune the variables below; the selector block underneath is mechanical.
+   =================================================================== */
+
+/* Light */
+:root {
+    --code-fg:        var(--ink);
+    --code-comment:   #8a7a5e;
+    --code-keyword:   #a3324a;
+    --code-string:    #5c7c2e;
+    --code-number:    #b86b1c;
+    --code-function:  #3a5b7a;
+    --code-type:      #7a4a8a;
+    --code-variable:  #6b3a55;
+    --code-operator:  var(--ink);
+    --code-error-fg:  #a3324a;
+    --code-error-bg:  #f4d4d4;
+    --code-line-hl:   rgba(255, 148, 0, 0.10);
+    --code-line-num:  var(--muted);
+    --code-diff-del:  #c0392b;
+    --code-diff-del-bg: rgba(192, 57, 43, 0.08);
+    --code-diff-ins:  #5c7c2e;
+    --code-diff-ins-bg: rgba(92, 124, 46, 0.08);
+}
+
+/* Dark */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --code-fg:        var(--ink);
+        --code-comment:   #7a7058;
+        --code-keyword:   #e07b5e;
+        --code-string:    #c2a86b;
+        --code-number:    #d49861;
+        --code-function:  #89b4d6;
+        --code-type:      #b594c8;
+        --code-variable:  #d4a3b5;
+        --code-operator:  var(--ink);
+        --code-error-fg:  #e07b5e;
+        --code-error-bg:  rgba(224, 123, 94, 0.15);
+        --code-line-hl:   rgba(196, 130, 58, 0.12);
+        --code-line-num:  var(--muted);
+        --code-diff-del:  #e07b5e;
+        --code-diff-del-bg: rgba(224, 123, 94, 0.10);
+        --code-diff-ins:  #c2a86b;
+        --code-diff-ins-bg: rgba(194, 168, 107, 0.10);
+    }
+}
+
+/* -------------------------------------------------------------------
+   Selector block — maps Chroma class names to the variables above.
+   These selectors are scoped to .post-content so they don't bleed.
+   ------------------------------------------------------------------- */
+
+.post-content .chroma { color: var(--code-fg); }
+
+/* Error */
+.post-content .chroma .err {
+    color: var(--code-error-fg);
+    background: var(--code-error-bg);
+}
+
+/* Keywords */
+.post-content .chroma .k,
+.post-content .chroma .kc,
+.post-content .chroma .kd,
+.post-content .chroma .kn,
+.post-content .chroma .kp,
+.post-content .chroma .kr { color: var(--code-keyword); font-weight: 600; }
+
+/* Keyword type — share type colour */
+.post-content .chroma .kt { color: var(--code-type); }
+
+/* Word operator (e.g. "and", "or" in Python) */
+.post-content .chroma .ow { color: var(--code-keyword); }
+
+/* Comments — italic */
+.post-content .chroma .c,
+.post-content .chroma .ch,
+.post-content .chroma .cm,
+.post-content .chroma .cp,
+.post-content .chroma .cpf,
+.post-content .chroma .c1,
+.post-content .chroma .cs { color: var(--code-comment); font-style: italic; }
+
+/* Strings */
+.post-content .chroma .s,
+.post-content .chroma .sa,
+.post-content .chroma .sb,
+.post-content .chroma .sc,
+.post-content .chroma .dl,
+.post-content .chroma .sd,
+.post-content .chroma .s2,
+.post-content .chroma .se,
+.post-content .chroma .sh,
+.post-content .chroma .si,
+.post-content .chroma .sx,
+.post-content .chroma .sr,
+.post-content .chroma .s1,
+.post-content .chroma .ss { color: var(--code-string); }
+
+/* String escape sequences — slightly brighter than string */
+.post-content .chroma .se { font-weight: 600; }
+
+/* Numbers */
+.post-content .chroma .m,
+.post-content .chroma .mb,
+.post-content .chroma .mf,
+.post-content .chroma .mh,
+.post-content .chroma .mi,
+.post-content .chroma .il,
+.post-content .chroma .mo { color: var(--code-number); }
+
+/* Operators and punctuation */
+.post-content .chroma .o,
+.post-content .chroma .p  { color: var(--code-operator); }
+
+/* Builtins and types */
+.post-content .chroma .nb,
+.post-content .chroma .bp,
+.post-content .chroma .nc,
+.post-content .chroma .nn { color: var(--code-type); }
+
+/* Functions */
+.post-content .chroma .nf,
+.post-content .chroma .fm { color: var(--code-function); }
+
+/* Names — tags (HTML/XML) */
+.post-content .chroma .nt { color: var(--code-keyword); }
+
+/* Names — attributes (HTML/XML) */
+.post-content .chroma .na { color: var(--code-type); }
+
+/* Variables */
+.post-content .chroma .nv,
+.post-content .chroma .vc,
+.post-content .chroma .vg,
+.post-content .chroma .vi,
+.post-content .chroma .vm,
+.post-content .chroma .no,
+.post-content .chroma .nd { color: var(--code-variable); }
+
+/* Generic — diffs */
+.post-content .chroma .gd {
+    color: var(--code-diff-del);
+    background: var(--code-diff-del-bg);
+    display: block;
+}
+.post-content .chroma .gi {
+    color: var(--code-diff-ins);
+    background: var(--code-diff-ins-bg);
+    display: block;
+}
+
+/* Generic — misc */
+.post-content .chroma .gh,
+.post-content .chroma .gu { color: var(--code-function); font-weight: 600; }
+.post-content .chroma .gs { font-weight: 600; }
+.post-content .chroma .ge { font-style: italic; }
+.post-content .chroma .gr { color: var(--code-error-fg); }
+.post-content .chroma .go { color: var(--code-comment); }
+.post-content .chroma .gp { color: var(--code-comment); user-select: none; }
+.post-content .chroma .gt { color: var(--code-error-fg); }
+
+/* Line highlight */
+.post-content .chroma .hl {
+    background: var(--code-line-hl);
+    display: block;
+    width: 100%;
+    margin: 0 -1.25em;
+    padding: 0 1.25em;
+}
+
+/* Line numbers */
+.post-content .chroma .ln,
+.post-content .chroma .lnt {
+    color: var(--code-line-num);
+    user-select: none;
+    margin-right: 1em;
+}
+
+/* Whitespace — inherit, no styling */
+.post-content .chroma .w { color: inherit; }

@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./chroma.css";
 
 @source "../../templates/**/*.tmpl";
 @source "../../posts/**/*.md";
