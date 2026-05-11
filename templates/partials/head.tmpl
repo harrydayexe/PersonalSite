@@ -22,15 +22,15 @@
     <meta property="og:type" content="website">
     <meta property="og:title" content="{{if .PageTitle}}{{.PageTitle}} — {{end}}{{.SiteTitle}}">
     <meta property="og:description" content="{{if .Description}}{{.Description}}{{else}}Harry Day's blog — software, projects, and ideas.{{end}}">
-    <meta property="og:url" content="https://harryday.xyz{{.BlogRoot}}">
-    <meta property="og:image" content="https://harryday.xyz/images/socialimage.png">
+    <meta property="og:url" content="{{.Custom.siteURL}}{{.BlogRoot}}">
+    <meta property="og:image" content="{{.Custom.siteURL}}/images/socialimage.png">
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@harrydayexe">
     <meta name="twitter:title" content="{{if .PageTitle}}{{.PageTitle}} — {{end}}{{.SiteTitle}}">
     <meta name="twitter:description" content="{{if .Description}}{{.Description}}{{else}}Harry Day's blog — software, projects, and ideas.{{end}}">
-    <meta name="twitter:image" content="https://harryday.xyz/images/socialimage.png">
+    <meta name="twitter:image" content="{{.Custom.siteURL}}/images/socialimage.png">
 
     <link rel="stylesheet" href="/styles/tailwind.css">
     {{if eq .Environment "local"}}

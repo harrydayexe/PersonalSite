@@ -17,8 +17,8 @@ github.com/dlclark/regexp2 v1.4.0/go.mod h1:2pZnwuY/m+8K6iRw6wQdMtk+rH5tNGR1i55k
 github.com/dlclark/regexp2 v1.7.0/go.mod h1:DHkYz0B9wPfa6wondMfaivmHpzrQ3v9q8cnmRbL6yW8=
 github.com/dlclark/regexp2 v1.11.5 h1:Q/sSnsKerHeCkc/jSTNq1oCm7KiVgUMZRDUoRu0JQZQ=
 github.com/dlclark/regexp2 v1.11.5/go.mod h1:DHkYz0B9wPfa6wondMfaivmHpzrQ3v9q8cnmRbL6yW8=
-github.com/harrydayexe/GoBlog/v2 v2.3.0 h1:vxyGss207G3t/Z0ReHmxlkAkX0hmtnjOfvmr/n9ad+4=
-github.com/harrydayexe/GoBlog/v2 v2.3.0/go.mod h1:9XEURI2sN791MYqB64tUOZeIQTswTC96j0IeDTbJQuw=
+github.com/harrydayexe/GoBlog/v2 v2.4.0-beta1 h1:oUVF+ImvAM9lALGmQC95FytwITBS+1kp4Kz38IdkUZE=
+github.com/harrydayexe/GoBlog/v2 v2.4.0-beta1/go.mod h1:4qKnTvYvFfNs+GPtAJvQbFphKKxd5TJN0mSfnUN5ZBA=
 github.com/harrydayexe/GoWebUtilities v1.3.2 h1:mfxgIkEqpRdEldyaDLKd5hmx2rcohxeRL+/0s0Svzgw=
 github.com/harrydayexe/GoWebUtilities v1.3.2/go.mod h1:msGwhqkUbSAhhIR+uFnLE08OhBCwuJW0BQ5kUnBvI6I=
 github.com/hexops/gotextdiff v1.0.3 h1:gitA9+qJrrTCsiCl7+kh75nPqQt1cx4ZkudSTLoUqJM=

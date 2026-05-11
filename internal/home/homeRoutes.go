@@ -20,12 +20,13 @@ type homePageData struct {
 	Year        int
 	BlogRoot    string
 	Environment string
+	SiteURL     string
 }
 
 // AddHomeRoute registers the GET /{$} handler for the site homepage on the provided mux.
 // It parses posts once at startup using GoBlog's parser and serves the home.tmpl template.
 // It is not safe for concurrent use during setup, but the resulting handler is.
-func AddHomeRoute(ctx context.Context, mux *http.ServeMux, postsFS fs.FS, templatesFS fs.FS, logger *slog.Logger, environment string) error {
+func AddHomeRoute(ctx context.Context, mux *http.ServeMux, postsFS fs.FS, templatesFS fs.FS, logger *slog.Logger, environment string, siteURL string) error {
 	tmpl, err := template.ParseFS(templatesFS, "pages/home.tmpl")
 	if err != nil {
 		return err
@@ -47,6 +48,7 @@ func AddHomeRoute(ctx context.Context, mux *http.ServeMux, postsFS fs.FS, templa
 			Year:        time.Now().Year(),
 			BlogRoot:    blogRoot,
 			Environment: environment,
+			SiteURL:     siteURL,
 		}); err != nil {
 			logger.ErrorContext(r.Context(), "failed to render homepage", slog.String("error", err.Error()))
 		}

@@ -1,9 +1,9 @@
 module github.com/harrydayexe/PersonalSite
 
-go 1.25.6
+go 1.26.3
 
 require (
-	github.com/harrydayexe/GoBlog/v2 v2.3.0
+	github.com/harrydayexe/GoBlog/v2 v2.4.0-beta1
 	github.com/harrydayexe/GoWebUtilities v1.3.2
 )
 

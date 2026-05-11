@@ -20,7 +20,7 @@ const blogRoot = "/blog/"
 // It uses custom templates matching the site's visual identity and serves posts
 // from the given fs.FS. It is not safe for concurrent use during setup, but the
 // resulting handler is.
-func AddBlogRoutes(ctx context.Context, mux *http.ServeMux, posts fs.FS, templates fs.FS, logger *slog.Logger, environment string) error {
+func AddBlogRoutes(ctx context.Context, mux *http.ServeMux, posts fs.FS, templates fs.FS, logger *slog.Logger, environment string, siteURL string) error {
 	logger.DebugContext(ctx, "adding blog routes")
 
 	renderer, err := generator.NewTemplateRenderer(templates)
@@ -34,6 +34,7 @@ func AddBlogRoutes(ctx context.Context, mux *http.ServeMux, posts fs.FS, templat
 		goblogconfig.WithBaseOption(goblogconfig.WithBlogRoot(blogRoot)),
 		goblogconfig.WithSiteTitle("Harry Day{}"),
 		goblogconfig.WithEnvironment(environment),
+		goblogconfig.WithCustomData(map[string]any{"siteURL": siteURL}),
 	)
 	gen.ParserConfig = goblogparser.Config{
 		EnableCodeHighlighting: true,

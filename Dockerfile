@@ -56,6 +56,7 @@ EXPOSE 8080
 # Set environment variables
 ENV PORT=8080
 ENV ENVIRONMENT=production
+ENV SITE_URL=https://harryday.dev
 ENV LOG_LEVEL=WARN
 ENV READ_TIMEOUT=15
 ENV WRITE_TIMEOUT=15
