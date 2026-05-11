@@ -6,7 +6,12 @@
     <main class="max-w-[640px] mx-auto px-6 pt-12 pb-4">
         <article class="space-y-8">
             <header class="space-y-4">
-                <time datetime="{{.Post.ShortDate}}" class="font-mono text-xs uppercase tracking-[0.15em] text-muted">{{.Post.FormattedDate}}</time>
+                <div class="flex items-center gap-3">
+                    <time datetime="{{.Post.ShortDate}}" class="font-mono text-xs uppercase tracking-[0.15em] text-muted">{{.Post.FormattedDate}}</time>
+                    {{if .Post.ReadingTimeMinutes}}
+                    <span class="font-mono text-xs text-muted">&middot; {{.Post.ReadingTimeMinutes}} min read</span>
+                    {{end}}
+                </div>
                 <h1 class="text-3xl font-semibold leading-tight">{{.Post.Title}}</h1>
                 {{if .Post.Description}}
                 <p class="text-xl text-muted leading-[1.55]">{{.Post.Description}}</p>
