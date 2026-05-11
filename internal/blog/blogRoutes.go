@@ -37,7 +37,6 @@ func AddBlogRoutes(ctx context.Context, mux *http.ServeMux, posts fs.FS, templat
 	)
 	gen.ParserConfig = goblogparser.Config{
 		EnableCodeHighlighting: true,
-		CodeHighlightingStyle:  "tango",
 	}
 
 	logger.DebugContext(ctx, "generator created", slog.String("config", gen.String()))
