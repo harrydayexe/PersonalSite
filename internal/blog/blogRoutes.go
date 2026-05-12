@@ -4,9 +4,12 @@ package blog
 import (
 	"context"
 	"fmt"
+	"html/template"
 	"io/fs"
 	"log/slog"
 	"net/http"
+	"strings"
+	"time"
 
 	goblogconfig "github.com/harrydayexe/GoBlog/v2/pkg/config"
 	"github.com/harrydayexe/GoBlog/v2/pkg/generator"
@@ -23,7 +26,13 @@ const blogRoot = "/blog/"
 func AddBlogRoutes(ctx context.Context, mux *http.ServeMux, posts fs.FS, templates fs.FS, logger *slog.Logger, environment string, siteURL string) error {
 	logger.DebugContext(ctx, "adding blog routes")
 
-	renderer, err := generator.NewTemplateRenderer(templates)
+	renderer, err := generator.NewTemplateRenderer(
+		templates,
+		goblogconfig.WithFuncs(template.FuncMap{
+			"hasPrefix": strings.HasPrefix,
+			"isoDate":   func(t time.Time) string { return t.UTC().Format(time.RFC3339) },
+		}),
+	)
 	if err != nil {
 		return err
 	}

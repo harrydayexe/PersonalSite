@@ -21,7 +21,16 @@
 
     <!-- Open Graph -->
     <meta property="og:site_name" content="Harry Day">
+    {{$isPost := hasPrefix .Path (printf "%sposts/" .BlogRoot)}}
+    {{if $isPost}}
+    <meta property="og:type" content="article">
+    <meta property="article:published_time" content="{{isoDate .Post.Date}}">
+    <meta property="article:author" content="Harry Day">
+    {{range .Post.Tags}}<meta property="article:tag" content="{{.}}">
+    {{end}}
+    {{else}}
     <meta property="og:type" content="website">
+    {{end}}
     <meta property="og:title" content="{{if .PageTitle}}{{.PageTitle}} — {{end}}{{.SiteTitle}}">
     <meta property="og:description"
         content="{{if .Description}}{{.Description}}{{else}}Harry Day's blog — software, projects, and ideas.{{end}}">
