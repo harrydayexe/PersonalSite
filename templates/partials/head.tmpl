@@ -36,6 +36,9 @@
         content="{{if .Description}}{{.Description}}{{else}}Harry Day's blog — software, projects, and ideas.{{end}}">
     <meta property="og:url" content="{{.Custom.siteURL}}{{.Path}}">
     <meta property="og:image" content="{{.Custom.siteURL}}/images/socialimage.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Harry Day — software engineer">
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
@@ -44,6 +47,7 @@
     <meta name="twitter:description"
         content="{{if .Description}}{{.Description}}{{else}}Harry Day's blog — software, projects, and ideas.{{end}}">
     <meta name="twitter:image" content="{{.Custom.siteURL}}/images/socialimage.png">
+    <meta name="twitter:image:alt" content="Harry Day — software engineer">
 
     <link rel="stylesheet" href="/styles/tailwind.css">
     {{if eq .Environment "local"}}
