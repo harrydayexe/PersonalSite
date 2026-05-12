@@ -4,9 +4,12 @@ package blog
 import (
 	"context"
 	"fmt"
+	"html/template"
 	"io/fs"
 	"log/slog"
 	"net/http"
+	"strings"
+	"time"
 
 	goblogconfig "github.com/harrydayexe/GoBlog/v2/pkg/config"
 	"github.com/harrydayexe/GoBlog/v2/pkg/generator"
@@ -20,10 +23,16 @@ const blogRoot = "/blog/"
 // It uses custom templates matching the site's visual identity and serves posts
 // from the given fs.FS. It is not safe for concurrent use during setup, but the
 // resulting handler is.
-func AddBlogRoutes(ctx context.Context, mux *http.ServeMux, posts fs.FS, templates fs.FS, logger *slog.Logger, environment string) error {
+func AddBlogRoutes(ctx context.Context, mux *http.ServeMux, posts fs.FS, templates fs.FS, logger *slog.Logger, environment string, siteURL string) error {
 	logger.DebugContext(ctx, "adding blog routes")
 
-	renderer, err := generator.NewTemplateRenderer(templates)
+	renderer, err := generator.NewTemplateRenderer(
+		templates,
+		goblogconfig.WithFuncs(template.FuncMap{
+			"hasPrefix": strings.HasPrefix,
+			"isoDate":   func(t time.Time) string { return t.UTC().Format(time.RFC3339) },
+		}),
+	)
 	if err != nil {
 		return err
 	}
@@ -32,12 +41,12 @@ func AddBlogRoutes(ctx context.Context, mux *http.ServeMux, posts fs.FS, templat
 		posts,
 		renderer,
 		goblogconfig.WithBaseOption(goblogconfig.WithBlogRoot(blogRoot)),
-		goblogconfig.WithSiteTitle("Harry Day{}"),
+		goblogconfig.WithSiteTitle("Harry Day"),
 		goblogconfig.WithEnvironment(environment),
+		goblogconfig.WithCustomData(map[string]any{"siteURL": siteURL}),
 	)
 	gen.ParserConfig = goblogparser.Config{
 		EnableCodeHighlighting: true,
-		CodeHighlightingStyle:  "tango",
 	}
 
 	logger.DebugContext(ctx, "generator created", slog.String("config", gen.String()))

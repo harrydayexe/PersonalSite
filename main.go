@@ -3,10 +3,12 @@ package main
 import (
 	"context"
 	"embed"
+	"fmt"
 	"io/fs"
 	"log"
 	"log/slog"
 	"net/http"
+	"strings"
 
 	"github.com/harrydayexe/GoWebUtilities/config"
 	"github.com/harrydayexe/GoWebUtilities/logging"
@@ -16,6 +18,21 @@ import (
 	homecontent "github.com/harrydayexe/PersonalSite/internal/home"
 	staticcontent "github.com/harrydayexe/PersonalSite/internal/static-content"
 )
+
+type appConfig struct {
+	config.ServerConfig
+	SiteURL string `env:"SITE_URL" envDefault:"https://harryday.dev"`
+}
+
+func (c appConfig) Validate() error {
+	if err := c.ServerConfig.Validate(); err != nil {
+		return err
+	}
+	if strings.TrimSpace(c.SiteURL) == "" {
+		return fmt.Errorf("SITE_URL must not be empty")
+	}
+	return nil
+}
 
 //go:embed static/*
 var staticFiles embed.FS
@@ -28,12 +45,12 @@ var templateFiles embed.FS
 
 func main() {
 	ctx := context.Background()
-	cfg, err := config.ParseConfig[config.ServerConfig]()
+	cfg, err := config.ParseConfig[appConfig]()
 	if err != nil {
 		log.Fatalf("failed to create config from environment: %s", err.Error())
 	}
 
-	logging.SetDefaultLogger(cfg)
+	logging.SetDefaultLogger(cfg.ServerConfig)
 	logger := slog.Default()
 
 	mux := http.NewServeMux()
@@ -62,11 +79,11 @@ func main() {
 		})
 	}
 
-	if err := homecontent.AddHomeRoute(ctx, mux, postsFS, templatesFS, logger, string(cfg.Environment)); err != nil {
+	if err := homecontent.AddHomeRoute(ctx, mux, postsFS, templatesFS, logger, string(cfg.Environment), cfg.SiteURL); err != nil {
 		log.Fatal(err)
 	}
 
-	if err := blogcontent.AddBlogRoutes(ctx, mux, postsFS, templatesFS, logger, string(cfg.Environment)); err != nil {
+	if err := blogcontent.AddBlogRoutes(ctx, mux, postsFS, templatesFS, logger, string(cfg.Environment), cfg.SiteURL); err != nil {
 		log.Fatal(err)
 	}
 

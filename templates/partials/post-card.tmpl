@@ -2,7 +2,12 @@
 <div class="py-3.5 group">
     <a href="{{.BlogRoot}}posts/{{.Slug}}" class="block">
         <div class="flex gap-6 items-start">
-            <time datetime="{{.ShortDate}}" class="font-mono text-xs text-muted shrink-0 w-24 pt-0.5">{{.ShortDate}}</time>
+            <div class="font-mono text-xs text-muted shrink-0 w-24 pt-0.5">
+                <time datetime="{{.ShortDate}}" class="block">{{.ShortDate}}</time>
+                {{if .ReadingTimeMinutes}}
+                <span class="block">{{.ReadingTimeMinutes}} min read</span>
+                {{end}}
+            </div>
             <div>
                 <span class="text-base text-ink group-hover:text-accent transition-colors duration-150">{{.Title}}</span>
                 {{if .Description}}
