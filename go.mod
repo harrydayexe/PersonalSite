@@ -3,7 +3,7 @@ module github.com/harrydayexe/PersonalSite
 go 1.26.3
 
 require (
-	github.com/harrydayexe/GoBlog/v2 v2.4.0-beta1
+	github.com/harrydayexe/GoBlog/v2 v2.4.0-beta3
 	github.com/harrydayexe/GoWebUtilities v1.3.2
 )
 

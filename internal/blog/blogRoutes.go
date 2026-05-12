@@ -32,7 +32,7 @@ func AddBlogRoutes(ctx context.Context, mux *http.ServeMux, posts fs.FS, templat
 		posts,
 		renderer,
 		goblogconfig.WithBaseOption(goblogconfig.WithBlogRoot(blogRoot)),
-		goblogconfig.WithSiteTitle("Harry Day{}"),
+		goblogconfig.WithSiteTitle("Harry Day"),
 		goblogconfig.WithEnvironment(environment),
 		goblogconfig.WithCustomData(map[string]any{"siteURL": siteURL}),
 	)
