@@ -25,3 +25,11 @@ build: css
 [group('dev')]
 run: css
     go run .
+
+# Build the dockerfile for the current architecture
+[group("build")]
+docker tag="personalsite:latest":
+    @echo "Building Docker image..."
+    docker build -t {{tag}} .
+    @echo "✓ Docker image built successfully"
+
