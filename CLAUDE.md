@@ -14,3 +14,9 @@ Current type scale on the home page:
 - Intro paragraphs (hero): `text-xl`
 - Body / section prose: `text-base`
 - Small supporting text (section labels, tags, footer): `text-xs`
+
+# Running on VPS
+This application runs on my VPS using Dokploy and docker-compose.
+
+The docker-compose.yml is read by dokploy and injected with traefik labels to setup the domain
+
