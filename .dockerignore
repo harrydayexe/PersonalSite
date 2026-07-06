@@ -5,23 +5,18 @@
 # Docker
 Dockerfile
 .dockerignore
+docker-compose.yml
 
 # Documentation
 README.md
 LICENSE
 
 # IDE
-.vscode
-.idea
 *.swp
 *.swo
 *~
 
 # Binaries
-*.exe
-*.dll
-*.so
-*.dylib
 main
 
 # Test files
@@ -31,3 +26,7 @@ testdata
 # Temporary files
 *.tmp
 *.log
+
+# Build Files
+justfile
+.air.toml
