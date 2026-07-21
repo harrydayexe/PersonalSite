@@ -59,7 +59,7 @@
         const observer = new IntersectionObserver(entries => {
             entries.forEach(e => { if (e.isIntersecting) this.active = e.target.id; });
         }, { rootMargin: '-10% 0px -85% 0px' });
-        ['writing', 'selected-work', 'experience'].forEach(id => {
+        ['writing', 'selected-work', 'experience', 'education'].forEach(id => {
             const el = document.getElementById(id);
             if (el) observer.observe(el);
         });
@@ -95,6 +95,10 @@
                     <a href="#experience" @click="active = 'experience'"
                         class="block font-mono text-xs transition-colors duration-150"
                         :class="active === 'experience' ? 'text-accent' : 'text-muted hover:text-accent'">Experience
+                        &rarr;</a>
+                    <a href="#education" @click="active = 'education'"
+                        class="block font-mono text-xs transition-colors duration-150"
+                        :class="active === 'education' ? 'text-accent' : 'text-muted hover:text-accent'">Education
                         &rarr;</a>
                 </nav>
 
@@ -211,7 +215,7 @@
                     </div>
                 </section>
 
-                <section id="experience" class="space-y-4 scroll-mt-12 md:min-h-[calc(100vh-8rem)]">
+                <section id="experience" class="space-y-4 scroll-mt-12">
                     {{template "section-label" "Experience"}}
                     <div class="space-y-7 text-base leading-[1.65]">
                         <div>
@@ -265,6 +269,12 @@
                                 <div class="text-accent">GitLab CI/CD &middot; .NET &middot; GraphQL</div>
                             </div>
                         </div>
+                    </div>
+                </section>
+
+                <section id="education" class="space-y-4 scroll-mt-12 md:min-h-[calc(100vh-8rem)]">
+                    {{template "section-label" "Education"}}
+                    <div class="space-y-7 text-base leading-[1.65]">
                         <div>
                             <p>
                                 <a href="https://manchester.ac.uk"
