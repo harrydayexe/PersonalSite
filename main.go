@@ -16,6 +16,7 @@ import (
 	"github.com/harrydayexe/GoWebUtilities/server"
 	blogcontent "github.com/harrydayexe/PersonalSite/internal/blog"
 	homecontent "github.com/harrydayexe/PersonalSite/internal/home"
+	"github.com/harrydayexe/PersonalSite/internal/songlinkr"
 	staticcontent "github.com/harrydayexe/PersonalSite/internal/static-content"
 )
 
@@ -84,6 +85,10 @@ func main() {
 	}
 
 	if err := blogcontent.AddBlogRoutes(ctx, mux, postsFS, templatesFS, logger, string(cfg.Environment), cfg.SiteURL); err != nil {
+		log.Fatal(err)
+	}
+
+	if err := songlinkr.AddSonglinkrRoutes(ctx, mux, templatesFS, logger, string(cfg.Environment), cfg.SiteURL); err != nil {
 		log.Fatal(err)
 	}
 
