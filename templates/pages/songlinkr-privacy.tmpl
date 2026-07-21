@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <title>SongLinkr Privacy Policy — Harry Day</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SongLinkr Privacy Policy.">
+    <meta name="robots" content="index, follow">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="language" content="English">
+    <meta name="author" content="Harry Day">
+    <meta name="theme-color" content="#FF9400">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+
+    <!-- Open Graph -->
+    <meta property="og:site_name" content="Harry Day">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="SongLinkr Privacy Policy — Harry Day">
+    <meta property="og:url" content="{{.SiteURL}}/songlinkr/privacy">
+    <meta property="og:description" content="SongLinkr Privacy Policy.">
+
+    <link rel="stylesheet" href="/styles/tailwind.css">
+    {{if eq .Environment "local"}}
+    <script>
+        const es = new EventSource("/reload");
+        es.onerror = () => {es.close(); setTimeout(() => location.reload(), 1500);};
+    </script>
+    {{end}}
+</head>
+
+<body class="bg-paper text-ink font-serif antialiased">
+    {{template "header" .}}
+    <main class="max-w-[640px] mx-auto px-6 pt-12 pb-4">
+        <div class="space-y-8">
+            <div class="flex items-center gap-4">
+                <h1 class="font-mono text-xs uppercase tracking-[0.15em] text-muted shrink-0">SongLinkr &middot;
+                    Privacy Policy</h1>
+                <hr class="flex-1 border-0 border-t border-rule m-0">
+            </div>
+            <p class="text-base leading-[1.65]">
+                SongLinkr does not collect any data whatsoever about you. Any links you give the app are processed
+                on-device and sent to the <a href="https://song.link" target="_blank" rel="noopener noreferrer"
+                    class="hover:text-accent hover:border-b hover:border-accent transition-[color,border-color] duration-150">Song.Link
+                    API</a> to fetch results. No account, no analytics, no storage.
+            </p>
+            <a href="/songlinkr" class="block font-mono text-xs text-accent pt-1">&larr; Back to SongLinkr</a>
+        </div>
+    </main>
+    {{template "footer" .}}
+</body>
+
+</html>

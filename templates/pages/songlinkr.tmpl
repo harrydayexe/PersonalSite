@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <title>SongLinkr — Harry Day</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="SongLinkr — an iOS app that converts music links between streaming platforms, built by Harry Day.">
+    <meta name="robots" content="index, follow">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="language" content="English">
+    <meta name="author" content="Harry Day">
+    <meta name="theme-color" content="#FF9400">
+    <meta name="apple-itunes-app" content="app-id=1561986085">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+
+    <!-- Open Graph -->
+    <meta property="og:site_name" content="Harry Day">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="SongLinkr — Harry Day">
+    <meta property="og:url" content="{{.SiteURL}}/songlinkr">
+    <meta property="og:image" content="{{.SiteURL}}/images/songlinkr/socialimage.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="SongLinkr — get music links for any service">
+    <meta property="og:description"
+        content="SongLinkr — an iOS app that converts music links between streaming platforms, built by Harry Day.">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@harrydayexe">
+    <meta name="twitter:title" content="SongLinkr — Harry Day">
+    <meta name="twitter:description"
+        content="SongLinkr — an iOS app that converts music links between streaming platforms, built by Harry Day.">
+    <meta name="twitter:image" content="{{.SiteURL}}/images/songlinkr/socialimage.png">
+    <meta name="twitter:image:alt" content="SongLinkr — get music links for any service">
+
+    <link rel="stylesheet" href="/styles/tailwind.css">
+    {{if eq .Environment "local"}}
+    <script>
+        const es = new EventSource("/reload");
+        es.onerror = () => {es.close(); setTimeout(() => location.reload(), 1500);};
+    </script>
+    {{end}}
+</head>
+
+<body class="bg-paper text-ink font-serif antialiased">
+    {{template "header" .}}
+    <main class="max-w-[640px] lg:max-w-[768px] mx-auto px-6 pt-12 pb-4">
+        <div class="space-y-16">
+
+            <header class="space-y-6">
+                <div class="flex items-center gap-4">
+                    <img src="/images/songlinkr/AppIcon.svg" alt="SongLinkr app icon"
+                        class="w-16 h-16 rounded-2xl shrink-0">
+                    <div>
+                        <h1 class="text-3xl font-semibold">SongLinkr</h1>
+                        <p class="font-mono text-xs uppercase tracking-[0.15em] text-muted mt-1">Get music links for any
+                            service</p>
+                    </div>
+                </div>
+                <p class="text-xl leading-[1.55]">
+                    An iOS app that converts music links between streaming platforms, so whatever you're sent, you
+                    can open it wherever you actually listen. Built natively in Swift and SwiftUI, it's picked up
+                    over 4,000 downloads through word of mouth alone.
+                </p>
+                <a href="https://apps.apple.com/us/app/songlinkr/id1561986085" target="_blank" rel="noopener noreferrer"
+                    class="inline-block">
+                    <img src="/images/songlinkr/AppStoreBadge/BlackBadge.svg" alt="Download on the App Store"
+                        class="h-11 dark:hidden">
+                    <img src="/images/songlinkr/AppStoreBadge/WhiteBadge.svg" alt="Download on the App Store"
+                        class="h-11 hidden dark:block">
+                </a>
+                <div class="rounded-2xl border border-rule bg-paper-deep p-6 flex justify-center">
+                    <img src="/images/songlinkr/HeroImageLight.png" alt="SongLinkr showing a converted song link"
+                        class="max-w-[240px] w-full rounded-xl">
+                </div>
+            </header>
+
+            <section class="space-y-4 scroll-mt-12">
+                {{template "section-label" "Any song, any platform"}}
+                <div class="space-y-6">
+                    <p class="text-base leading-[1.65]">
+                        The idea started with a familiar annoyance: sharing a song with a friend, only for them to
+                        complain it's on the wrong streaming service. SongLinkr takes a link to a song or album
+                        and gives you the freedom to open it on whichever platform you actually use.
+                    </p>
+                    <div class="rounded-2xl border border-rule bg-paper-deep p-6 flex justify-center">
+                        <img src="/images/songlinkr/LinkHeroImageLight.png"
+                            alt="SongLinkr converting a link between platforms" class="max-w-[220px] w-full rounded-xl">
+                    </div>
+                </div>
+            </section>
+
+            <section class="space-y-4 scroll-mt-12">
+                {{template "section-label" "Results from across the web"}}
+                <div class="space-y-6">
+                    <p class="text-base leading-[1.65]">
+                        Search results are powered by the <a href="https://song.link" target="_blank"
+                            rel="noopener noreferrer"
+                            class="font-semibold hover:text-accent hover:border-b hover:border-accent transition-[color,border-color] duration-150">Song.Link</a>
+                        API, covering a wide and growing range of platforms — Spotify, Apple Music, YouTube,
+                        SoundCloud, Deezer, and many more.
+                    </p>
+                    <div class="rounded-2xl border border-rule bg-paper-deep p-6 flex justify-center">
+                        <img src="/images/songlinkr/ListFeatureImageLight.png"
+                            alt="SongLinkr listing results across streaming platforms"
+                            class="max-w-[220px] w-full rounded-xl">
+                    </div>
+                </div>
+            </section>
+
+            <section class="space-y-4 scroll-mt-12">
+                {{template "section-label" "Shazam, built in"}}
+                <div class="space-y-6">
+                    <p class="text-base leading-[1.65]">
+                        Shazam's recognition technology is built into the app, so you can identify whatever's playing
+                        around you — in a shop, a restaurant, or on the radio — and get it onto your platform of
+                        choice. Matches sync back to your Shazam library too.
+                    </p>
+                    <div class="rounded-2xl border border-rule bg-paper-deep p-6 flex justify-center">
+                        <img src="/images/songlinkr/ShazamFeatureImageLight.png" alt="SongLinkr showing a Shazam match"
+                            class="max-w-[220px] w-full rounded-xl">
+                    </div>
+                </div>
+            </section>
+
+            <section class="space-y-4 scroll-mt-12">
+                {{template "section-label" "A few more details"}}
+                <ul class="space-y-4 text-base leading-[1.65]">
+                    <li><span class="font-semibold">Clipboard-aware.</span> If you have a link copied when you open the
+                        app, it's pasted in automatically.</li>
+                    <li><span class="font-semibold">Set-and-forget defaults.</span> Choose a favourite platform once
+                        and results open there automatically from then on.</li>
+                    <li><span class="font-semibold">Share extension.</span> Send a link to SongLinkr directly from any
+                        share sheet.</li>
+                    <li><span class="font-semibold">Light and dark.</span> Follows the system appearance, day or
+                        night.</li>
+                    <li><span class="font-semibold">Translated.</span> Available in English, Spanish, and German.</li>
+                </ul>
+            </section>
+
+            <section class="space-y-4">
+                <div class="font-mono text-xs uppercase tracking-[0.12em] mt-2 space-y-1.5">
+                    <div class="text-muted">2021 &ndash; Present</div>
+                    <div class="text-accent">Swift &middot; SwiftUI</div>
+                </div>
+                <p class="font-mono text-xs text-muted leading-relaxed">
+                    Powered by <a href="https://song.link" target="_blank" rel="noopener noreferrer"
+                        class="hover:text-accent transition-colors duration-150">Song.Link</a>.
+                    SongLinkr is not actively developed further, but remains available and supported.
+                </p>
+                <div class="flex flex-wrap gap-4 font-mono text-xs">
+                    <a href="/songlinkr/privacy"
+                        class="text-muted hover:text-accent transition-colors duration-150">Privacy Policy</a>
+                    <a href="/songlinkr/support"
+                        class="text-muted hover:text-accent transition-colors duration-150">Support</a>
+                </div>
+                <p class="font-mono text-xs text-muted leading-relaxed">
+                    Apple, the Apple logo and iPhone are trademarks of Apple Inc., registered in the U.S. and other
+                    countries. App Store is a service mark of Apple Inc.
+                </p>
+            </section>
+
+        </div>
+    </main>
+    {{template "footer" .}}
+</body>
+
+</html>
+
+{{define "section-label"}}
+<div class="flex items-center gap-4">
+    <h2 class="font-mono text-xs uppercase tracking-[0.15em] text-muted shrink-0">{{.}}</h2>
+    <hr class="flex-1 border-0 border-t border-rule m-0">
+</div>
+{{end}}
