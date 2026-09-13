@@ -40,7 +40,7 @@ func AddBlogRoutes(ctx context.Context, mux *http.ServeMux, posts fs.FS, templat
 	gen := generator.New(
 		posts,
 		renderer,
-		goblogconfig.WithBaseOption(goblogconfig.WithBlogRoot(blogRoot)),
+		goblogconfig.WithBlogRoot(blogRoot).AsGeneratorOption(),
 		goblogconfig.WithSiteTitle("Harry Day"),
 		goblogconfig.WithEnvironment(environment),
 		goblogconfig.WithCustomData(map[string]any{"siteURL": siteURL}),
@@ -62,7 +62,17 @@ func AddBlogRoutes(ctx context.Context, mux *http.ServeMux, posts fs.FS, templat
 
 	logger.DebugContext(ctx, "blog generated", slog.String("index", string(blog.Index)))
 
-	handler := goblogserver.Handler(blog, logger, goblogconfig.WithBlogRoot(blogRoot))
+	assetsFS, err := fs.Sub(posts, "images")
+	if err != nil {
+		return err
+	}
+
+	handler := goblogserver.Handler(
+		blog,
+		logger,
+		goblogconfig.WithBlogRoot(blogRoot),
+		goblogconfig.WithAssetsDir(assetsFS),
+	)
 	mux.Handle(blogRoot, handler)
 
 	logger.DebugContext(ctx, "finished adding blog routes")
