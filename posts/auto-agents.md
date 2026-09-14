@@ -6,7 +6,6 @@ tags: ["ai", "devcontainer", "agents", "git"]
 slug: "forbidden-fruit-autonomous-agents"
 description: "A deep dive into securing autonomous AI coding agents: hardware-key commit signing, GitHub access control, and devcontainer sandboxing."
 ---
-# The Forbidden Fruit of Autonomous Agents
 I have trust issues. I have long been reluctant to allow AI control over machine, especially when running unsupervised. I have watched as my peers in the software engineering community have given over all control to these agents, with little regard for basic safeguarding. Much like the snake whispering in the ear of Eve in the Garden of Eden, the fruit, or in this case productivity gains, was too irresistible for them to ignore. 
 
 In the past year I have loosened my stance somewhat: a strong deny and allowlist in Claude Code, for example, helped me feel better. But I have not yet taken the leap into auto-mode or bypass permissions. This was, in my opinion, a step too far for code execution onto my machine. 
