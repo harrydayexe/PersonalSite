@@ -25,6 +25,9 @@
     {{if $isPost}}
     <meta property="og:type" content="article">
     <meta property="article:published_time" content="{{isoDate .Post.Date}}">
+    {{if .Post.HasLastEdited}}
+    <meta property="article:modified_time" content="{{isoDate .Post.LastEdited}}">
+    {{end}}
     <meta property="article:author" content="Harry Day">
     {{range .Post.Tags}}<meta property="article:tag" content="{{.}}">
     {{end}}

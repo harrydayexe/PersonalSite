@@ -1,6 +1,7 @@
 ---
 title: "The Forbidden Fruit of Autonomous Agents"
 date: 2026-09-12
+lastEdited: 2026-09-17
 author: "Harry Day"
 tags: ["ai", "devcontainer", "agents", "git"]
 slug: "forbidden-fruit-autonomous-agents"

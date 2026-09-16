@@ -11,6 +11,9 @@
                     {{if .Post.ReadingTimeMinutes}}
                     <span class="font-mono text-xs text-muted">&middot; {{.Post.ReadingTimeMinutes}} min read</span>
                     {{end}}
+                    {{if .Post.HasLastEdited}}
+                    <span class="font-mono text-xs text-muted">&middot; updated <time datetime="{{.Post.ShortLastEdited}}">{{.Post.FormattedLastEdited}}</time></span>
+                    {{end}}
                 </div>
                 <h1 class="text-3xl font-semibold leading-tight">{{.Post.Title}}</h1>
                 {{if .Post.Description}}
