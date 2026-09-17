@@ -17,6 +17,10 @@ type songlinkrPageData struct {
 	BlogRoot    string
 	Environment string
 	SiteURL     string
+	// FeedsEnabled is required by the shared header and footer partials, which
+	// gate their RSS link on it. See the equivalent field on the home page's
+	// data struct.
+	FeedsEnabled bool
 }
 
 // AddSonglinkrRoutes registers the SongLinkr landing, privacy, and support
@@ -33,16 +37,18 @@ func AddSonglinkrRoutes(ctx context.Context, mux *http.ServeMux, templatesFS fs.
 		"pages/songlinkr-support.tmpl",
 		"partials/header.tmpl",
 		"partials/footer.tmpl",
+		"partials/rss-icon.tmpl",
 	)
 	if err != nil {
 		return err
 	}
 
 	data := songlinkrPageData{
-		Year:        time.Now().Year(),
-		BlogRoot:    blogRoot,
-		Environment: environment,
-		SiteURL:     siteURL,
+		Year:         time.Now().Year(),
+		BlogRoot:     blogRoot,
+		Environment:  environment,
+		SiteURL:      siteURL,
+		FeedsEnabled: siteURL != "",
 	}
 
 	render := func(name string) http.HandlerFunc {

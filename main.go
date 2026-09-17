@@ -92,6 +92,19 @@ func main() {
 		log.Fatal(err)
 	}
 
+	// The blog lives under /blog/, so GoBlog serves its feeds at
+	// /blog/rss.xml and /blog/atom.xml — the URLs the autodiscovery <link>
+	// tags advertise. Readers and crawlers commonly probe the site root
+	// regardless, so point those paths at the real feeds.
+	for path, target := range map[string]string{
+		"GET /rss.xml":  blogcontent.RSSPath,
+		"GET /atom.xml": blogcontent.AtomPath,
+	} {
+		mux.HandleFunc(path, func(w http.ResponseWriter, r *http.Request) {
+			http.Redirect(w, r, target, http.StatusMovedPermanently)
+		})
+	}
+
 	stack := middleware.CreateStack(
 		middleware.NewLoggingMiddleware(logger),
 	)

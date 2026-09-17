@@ -19,6 +19,14 @@ import (
 
 const blogRoot = "/blog/"
 
+// RSSPath and AtomPath are the canonical URLs of the site-wide feeds, served
+// by GoBlog's handler under the blog root. They are exported so callers can
+// redirect the root-level /rss.xml and /atom.xml paths here.
+const (
+	RSSPath  = blogRoot + "rss.xml"
+	AtomPath = blogRoot + "atom.xml"
+)
+
 // AddBlogRoutes registers the blog HTTP routes at /blog/ on the provided mux.
 // It uses custom templates matching the site's visual identity and serves posts
 // from the given fs.FS. It is not safe for concurrent use during setup, but the
@@ -53,6 +61,11 @@ func AddBlogRoutes(ctx context.Context, mux *http.ServeMux, posts fs.FS, templat
 		goblogconfig.WithSiteTitle("Harry Day"),
 		goblogconfig.WithEnvironment(environment),
 		goblogconfig.WithCustomData(map[string]any{"siteURL": siteURL}),
+		// WithBaseURL is what switches feed generation on: RSS and Atom items
+		// need fully-qualified URLs, so GoBlog skips feeds entirely without it.
+		// It also sets BaseData.FeedsEnabled, which the shared partials gate
+		// their feed links on. No WithFeedPostLimit, so every post is included.
+		goblogconfig.WithBaseURL(siteURL),
 	)
 	gen.ParserConfig = goblogparser.Config{
 		EnableCodeHighlighting: true,

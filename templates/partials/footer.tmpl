@@ -9,6 +9,9 @@
             <li><a href="https://github.com/harrydayexe" class="font-mono text-xs text-muted hover:text-accent transition-colors duration-150" target="_blank" rel="noopener noreferrer">github.com/harrydayexe</a></li>
             <li><a href="https://linkedin.com/in/harrydayexe" class="font-mono text-xs text-muted hover:text-accent transition-colors duration-150" target="_blank" rel="noopener noreferrer">linkedin.com/in/harrydayexe</a></li>
             <li><a href="https://twitter.com/harrydayexe" class="font-mono text-xs text-muted hover:text-accent transition-colors duration-150" target="_blank" rel="noopener noreferrer">x.com/harrydayexe</a></li>
+            {{if .FeedsEnabled}}
+            <li><a href="{{.BlogRoot}}rss.xml" class="inline-flex items-center gap-2 font-mono text-xs text-muted hover:text-accent transition-colors duration-150">{{template "rss-icon"}}Subscribe via RSS</a></li>
+            {{end}}
         </ul>
     </section>
     <div class="space-y-1.5">

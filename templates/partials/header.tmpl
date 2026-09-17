@@ -2,10 +2,13 @@
 <div class="max-w-[640px] mx-auto px-6 pt-24">
     <div class="space-y-4">
         <a href="/" class="block text-3xl font-semibold text-ink hover:text-accent transition-colors duration-150">Harry Day</a>
-        <nav class="flex gap-6">
+        <nav class="flex items-center gap-6">
             <a href="/" class="font-mono text-xs uppercase tracking-[0.15em] text-muted hover:text-accent transition-colors duration-150">Home</a>
             <a href="{{.BlogRoot}}" class="font-mono text-xs uppercase tracking-[0.15em] text-muted hover:text-accent transition-colors duration-150">Writing</a>
             <a href="{{.BlogRoot}}tags" class="font-mono text-xs uppercase tracking-[0.15em] text-muted hover:text-accent transition-colors duration-150">Tags</a>
+            {{if .FeedsEnabled}}
+            <a href="{{.BlogRoot}}rss.xml" class="text-muted hover:text-accent transition-colors duration-150" title="Subscribe via RSS" aria-label="Subscribe via RSS">{{template "rss-icon"}}</a>
+            {{end}}
         </nav>
     </div>
 </div>

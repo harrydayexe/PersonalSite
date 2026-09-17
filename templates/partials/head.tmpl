@@ -26,6 +26,13 @@
 
     <link rel="canonical" href="{{.Custom.siteURL}}{{.Path}}">
 
+    {{/* Feed autodiscovery. The blog-root paths are canonical; /rss.xml and
+         /atom.xml exist only as redirects for readers that probe the site root. */}}
+    {{if .FeedsEnabled}}
+    <link rel="alternate" type="application/rss+xml" title="Harry Day — RSS" href="{{.BlogRoot}}rss.xml">
+    <link rel="alternate" type="application/atom+xml" title="Harry Day — Atom" href="{{.BlogRoot}}atom.xml">
+    {{end}}
+
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">

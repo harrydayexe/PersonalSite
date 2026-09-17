@@ -21,6 +21,11 @@ type homePageData struct {
 	BlogRoot    string
 	Environment string
 	SiteURL     string
+	// FeedsEnabled mirrors models.BaseData.FeedsEnabled, which the blog's
+	// templates get from the generator. The home page is rendered outside the
+	// generator, so the field is set here using the same rule GoBlog applies:
+	// feeds exist when a base URL is configured.
+	FeedsEnabled bool
 }
 
 // AddHomeRoute registers the GET /{$} handler for the site homepage on the provided mux.
@@ -29,7 +34,8 @@ type homePageData struct {
 func AddHomeRoute(ctx context.Context, mux *http.ServeMux, postsFS fs.FS, templatesFS fs.FS, logger *slog.Logger, environment string, siteURL string) error {
 	// schema.tmpl is shared with the blog's head partial so the Person and
 	// WebSite JSON-LD nodes stay identical across the two template trees.
-	tmpl, err := template.ParseFS(templatesFS, "pages/home.tmpl", "partials/schema.tmpl")
+	// rss-icon.tmpl is shared for the same reason: one glyph, three trees.
+	tmpl, err := template.ParseFS(templatesFS, "pages/home.tmpl", "partials/schema.tmpl", "partials/rss-icon.tmpl")
 	if err != nil {
 		return err
 	}
@@ -46,11 +52,12 @@ func AddHomeRoute(ctx context.Context, mux *http.ServeMux, postsFS fs.FS, templa
 	mux.HandleFunc("GET /{$}", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 		if err := tmpl.Execute(w, homePageData{
-			Posts:       posts,
-			Year:        time.Now().Year(),
-			BlogRoot:    blogRoot,
-			Environment: environment,
-			SiteURL:     siteURL,
+			Posts:        posts,
+			Year:         time.Now().Year(),
+			BlogRoot:     blogRoot,
+			Environment:  environment,
+			SiteURL:      siteURL,
+			FeedsEnabled: siteURL != "",
 		}); err != nil {
 			logger.ErrorContext(r.Context(), "failed to render homepage", slog.String("error", err.Error()))
 		}
