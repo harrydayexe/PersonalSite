@@ -31,6 +31,15 @@ func AddBlogRoutes(ctx context.Context, mux *http.ServeMux, posts fs.FS, templat
 		goblogconfig.WithFuncs(template.FuncMap{
 			"hasPrefix": strings.HasPrefix,
 			"isoDate":   func(t time.Time) string { return t.UTC().Format(time.RFC3339) },
+			// inc converts a zero-based range index into a one-based
+			// schema.org ListItem position.
+			"inc": func(i int) int { return i + 1 },
+			// wordCount approximates a post's length for schema.org
+			// wordCount. It counts whitespace-separated tokens in the raw
+			// markdown, so fences, link syntax and punctuation inflate it
+			// slightly; the property is a hint to search engines, not a
+			// figure displayed anywhere.
+			"wordCount": func(s string) int { return len(strings.Fields(s)) },
 		}),
 	)
 	if err != nil {

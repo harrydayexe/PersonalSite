@@ -27,7 +27,9 @@ type homePageData struct {
 // It parses posts once at startup using GoBlog's parser and serves the home.tmpl template.
 // It is not safe for concurrent use during setup, but the resulting handler is.
 func AddHomeRoute(ctx context.Context, mux *http.ServeMux, postsFS fs.FS, templatesFS fs.FS, logger *slog.Logger, environment string, siteURL string) error {
-	tmpl, err := template.ParseFS(templatesFS, "pages/home.tmpl")
+	// schema.tmpl is shared with the blog's head partial so the Person and
+	// WebSite JSON-LD nodes stay identical across the two template trees.
+	tmpl, err := template.ParseFS(templatesFS, "pages/home.tmpl", "partials/schema.tmpl")
 	if err != nil {
 		return err
 	}

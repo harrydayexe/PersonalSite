@@ -1,4 +1,16 @@
 {{define "head"}}
+{{/* Page-type discrimination. Paths are clean URLs: {BlogRoot}, {BlogRoot}posts/{slug},
+     {BlogRoot}tags and {BlogRoot}tags/{tag}. */}}
+{{$site := .Custom.siteURL}}
+{{$canonical := printf "%s%s" .Custom.siteURL .Path}}
+{{$personID := printf "%s/#person" .Custom.siteURL}}
+{{$websiteID := printf "%s/#website" .Custom.siteURL}}
+{{$blogURL := printf "%s%s" .Custom.siteURL .BlogRoot}}
+{{$blogID := printf "%s%s#blog" .Custom.siteURL .BlogRoot}}
+{{$tagsURL := printf "%s%stags" .Custom.siteURL .BlogRoot}}
+{{$isPost := hasPrefix .Path (printf "%sposts/" .BlogRoot)}}
+{{$isTag := hasPrefix .Path (printf "%stags/" .BlogRoot)}}
+{{$isTagsIndex := eq .Path (printf "%stags" .BlogRoot)}}
 
 <head>
     <meta charset="utf-8">
@@ -23,7 +35,6 @@
 
     <!-- Open Graph -->
     <meta property="og:site_name" content="Harry Day">
-    {{$isPost := hasPrefix .Path (printf "%sposts/" .BlogRoot)}}
     {{if $isPost}}
     <meta property="og:type" content="article">
     <meta property="article:published_time" content="{{isoDate .Post.Date}}">
@@ -53,6 +64,154 @@
         content="{{if .Description}}{{.Description}}{{else}}Harry Day's blog — software, projects, and ideas.{{end}}">
     <meta name="twitter:image" content="{{.Custom.siteURL}}/images/socialimage.png">
     <meta name="twitter:image:alt" content="Harry Day — software engineer">
+
+    <!-- Structured data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {{template "schema-person" $site}},
+            {{template "schema-website" $site}},
+            {{if $isPost}}
+            {
+                "@type": "BlogPosting",
+                "@id": {{printf "%s#blogposting" $canonical}},
+                "url": {{$canonical}},
+                "mainEntityOfPage": {"@id": {{printf "%s#webpage" $canonical}}},
+                "headline": {{.Post.Title}},
+                "description": {{.Post.Description}},
+                "image": {{printf "%s/images/socialimage.png" $site}},
+                "datePublished": {{isoDate .Post.Date}},
+                {{if and .Post.HasLastEdited (ne (isoDate .Post.LastEdited) (isoDate .Post.Date))}}"dateModified": {{isoDate .Post.LastEdited}},
+                {{end}}{{if .Post.Tags}}"keywords": [{{range $i, $tag := .Post.Tags}}{{if $i}}, {{end}}{{$tag}}{{end}}],
+                {{end}}{{with .Post.ReadingTimeMinutes}}"timeRequired": {{printf "PT%dM" .}},
+                {{end}}{{with wordCount .Post.RawContent}}"wordCount": {{.}},
+                {{end}}"inLanguage": "en-GB",
+                "isPartOf": {"@id": {{$blogID}}},
+                "author": {"@id": {{$personID}}},
+                "publisher": {"@id": {{$personID}}}
+            },
+            {
+                "@type": "WebPage",
+                "@id": {{printf "%s#webpage" $canonical}},
+                "url": {{$canonical}},
+                "name": {{.Post.Title}},
+                "description": {{.Post.Description}},
+                "inLanguage": "en-GB",
+                "isPartOf": {"@id": {{$websiteID}}},
+                "breadcrumb": {"@id": {{printf "%s#breadcrumb" $canonical}}}
+            },
+            {
+                "@type": "BreadcrumbList",
+                "@id": {{printf "%s#breadcrumb" $canonical}},
+                "itemListElement": [
+                    {"@type": "ListItem", "position": 1, "name": "Home", "item": {{printf "%s/" $site}}},
+                    {"@type": "ListItem", "position": 2, "name": "Writing", "item": {{$blogURL}}},
+                    {"@type": "ListItem", "position": 3, "name": {{.Post.Title}}, "item": {{$canonical}}}
+                ]
+            }
+            {{else if $isTag}}
+            {
+                "@type": "CollectionPage",
+                "@id": {{printf "%s#webpage" $canonical}},
+                "url": {{$canonical}},
+                "name": {{printf "Posts tagged #%s" .Tag}},
+                "description": {{printf "Every post on Harry Day's blog tagged #%s." .Tag}},
+                "inLanguage": "en-GB",
+                "isPartOf": {"@id": {{$websiteID}}},
+                "breadcrumb": {"@id": {{printf "%s#breadcrumb" $canonical}}},
+                "mainEntity": {"@id": {{printf "%s#itemlist" $canonical}}}
+            },
+            {
+                "@type": "ItemList",
+                "@id": {{printf "%s#itemlist" $canonical}},
+                "numberOfItems": {{.PostCount}},
+                "itemListElement": [{{range $i, $post := .Posts}}{{if $i}},{{end}}
+                    {"@type": "ListItem", "position": {{inc $i}}, "name": {{$post.Title}}, "url": {{printf "%s%sposts/%s" $site $.BlogRoot $post.Slug}}}{{end}}
+                ]
+            },
+            {
+                "@type": "BreadcrumbList",
+                "@id": {{printf "%s#breadcrumb" $canonical}},
+                "itemListElement": [
+                    {"@type": "ListItem", "position": 1, "name": "Home", "item": {{printf "%s/" $site}}},
+                    {"@type": "ListItem", "position": 2, "name": "Tags", "item": {{$tagsURL}}},
+                    {"@type": "ListItem", "position": 3, "name": {{printf "#%s" .Tag}}, "item": {{$canonical}}}
+                ]
+            }
+            {{else if $isTagsIndex}}
+            {
+                "@type": "CollectionPage",
+                "@id": {{printf "%s#webpage" $canonical}},
+                "url": {{$canonical}},
+                "name": "Tags",
+                "description": "Every tag used across Harry Day's writing.",
+                "inLanguage": "en-GB",
+                "isPartOf": {"@id": {{$websiteID}}},
+                "breadcrumb": {"@id": {{printf "%s#breadcrumb" $canonical}}},
+                "mainEntity": {"@id": {{printf "%s#itemlist" $canonical}}}
+            },
+            {
+                "@type": "ItemList",
+                "@id": {{printf "%s#itemlist" $canonical}},
+                "numberOfItems": {{.TotalTags}},
+                "itemListElement": [{{range $i, $tag := .Tags}}{{if $i}},{{end}}
+                    {"@type": "ListItem", "position": {{inc $i}}, "name": {{printf "#%s" $tag.Name}}, "url": {{printf "%s%stags/%s" $site $.BlogRoot $tag.Name}}}{{end}}
+                ]
+            },
+            {
+                "@type": "BreadcrumbList",
+                "@id": {{printf "%s#breadcrumb" $canonical}},
+                "itemListElement": [
+                    {"@type": "ListItem", "position": 1, "name": "Home", "item": {{printf "%s/" $site}}},
+                    {"@type": "ListItem", "position": 2, "name": "Tags", "item": {{$tagsURL}}}
+                ]
+            }
+            {{else}}
+            {
+                "@type": "Blog",
+                "@id": {{$blogID}},
+                "url": {{$blogURL}},
+                "name": "Writing",
+                {{/* Not .Description: the generator supplies "Recent blog posts" for the
+                     index, which is too thin to be worth indexing. */}}
+                "description": "Harry Day's blog — software, projects, and ideas.",
+                "inLanguage": "en-GB",
+                "isPartOf": {"@id": {{$websiteID}}},
+                "author": {"@id": {{$personID}}},
+                "publisher": {"@id": {{$personID}}}{{if .Posts}},
+                "blogPost": [{{range $i, $post := .Posts}}{{if $i}},{{end}}
+                    {
+                        "@type": "BlogPosting",
+                        "@id": {{printf "%s%sposts/%s#blogposting" $site $.BlogRoot $post.Slug}},
+                        "headline": {{$post.Title}},
+                        "url": {{printf "%s%sposts/%s" $site $.BlogRoot $post.Slug}},
+                        "datePublished": {{isoDate $post.Date}}
+                    }{{end}}
+                ]{{end}}
+            },
+            {
+                "@type": "CollectionPage",
+                "@id": {{printf "%s#webpage" $canonical}},
+                "url": {{$canonical}},
+                "name": "Writing",
+                "inLanguage": "en-GB",
+                "isPartOf": {"@id": {{$websiteID}}},
+                "breadcrumb": {"@id": {{printf "%s#breadcrumb" $canonical}}},
+                "mainEntity": {"@id": {{$blogID}}}
+            },
+            {
+                "@type": "BreadcrumbList",
+                "@id": {{printf "%s#breadcrumb" $canonical}},
+                "itemListElement": [
+                    {"@type": "ListItem", "position": 1, "name": "Home", "item": {{printf "%s/" $site}}},
+                    {"@type": "ListItem", "position": 2, "name": "Writing", "item": {{$blogURL}}}
+                ]
+            }
+            {{end}}
+        ]
+    }
+    </script>
 
     <link rel="stylesheet" href="/styles/tailwind.css">
     {{if eq .Environment "local"}}

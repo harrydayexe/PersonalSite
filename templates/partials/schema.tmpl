@@ -1,0 +1,34 @@
+{{/*
+    Shared JSON-LD nodes. Each takes the site's base URL (no trailing slash) as
+    its dot, so both the blog's head partial and the standalone home page can
+    emit an identical Person entity.
+
+    These are rendered inside <script type="application/ld+json">, which
+    html/template treats as a JS context: interpolate values unquoted
+    ({{$x}}, not "{{$x}}") and the escaper emits them as JSON-encoded strings.
+*/}}
+{{define "schema-person"}}{
+                "@type": "Person",
+                "@id": {{printf "%s/#person" .}},
+                "name": "Harry Day",
+                "givenName": "Harry",
+                "familyName": "Day",
+                "url": {{printf "%s/" .}},
+                "jobTitle": "Software Engineer",
+                "description": "Software engineer based in London. I build software to solve problems, with an interest in highly performant, distributed systems.",
+                "knowsAbout": ["Software engineering", "Distributed systems", "Go", "Kubernetes"],
+                "sameAs": [
+                    "https://github.com/harrydayexe",
+                    "https://www.linkedin.com/in/harrydayexe",
+                    "https://x.com/harrydayexe"
+                ]
+            }{{end}}
+{{define "schema-website"}}{
+                "@type": "WebSite",
+                "@id": {{printf "%s/#website" .}},
+                "url": {{printf "%s/" .}},
+                "name": "Harry Day",
+                "description": "Harry Day — software engineer based in London.",
+                "inLanguage": "en-GB",
+                "publisher": {"@id": {{printf "%s/#person" .}}}
+            }{{end}}

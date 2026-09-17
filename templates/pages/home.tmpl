@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <title>Harry Day</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Harry Day — software engineer based in Manchester.">
+    <meta name="description" content="Harry Day — software engineer based in London.">
     <meta name="robots" content="index, follow">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="language" content="English">
@@ -30,7 +30,7 @@
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:image:alt" content="Harry Day — software engineer">
-    <meta property="og:description" content="Harry Day — software engineer based in Manchester.">
+    <meta property="og:description" content="Harry Day — software engineer based in London.">
     <meta property="profile:first_name" content="Harry">
     <meta property="profile:last_name" content="Day">
     <meta property="profile:username" content="harrydayexe">
@@ -39,9 +39,31 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@harrydayexe">
     <meta name="twitter:title" content="Harry Day">
-    <meta name="twitter:description" content="Harry Day — software engineer based in Manchester.">
+    <meta name="twitter:description" content="Harry Day — software engineer based in London.">
     <meta name="twitter:image" content="{{.SiteURL}}/images/socialimage.png">
     <meta name="twitter:image:alt" content="Harry Day — software engineer">
+
+    <!-- Structured data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {{template "schema-person" .SiteURL}},
+            {{template "schema-website" .SiteURL}},
+            {
+                "@type": "ProfilePage",
+                "@id": {{printf "%s/#webpage" .SiteURL}},
+                "url": {{printf "%s/" .SiteURL}},
+                "name": "Harry Day",
+                "description": "Harry Day — software engineer based in London.",
+                "inLanguage": "en-GB",
+                "isPartOf": {"@id": {{printf "%s/#website" .SiteURL}}},
+                "about": {"@id": {{printf "%s/#person" .SiteURL}}},
+                "mainEntity": {"@id": {{printf "%s/#person" .SiteURL}}}
+            }
+        ]
+    }
+    </script>
 
     <link rel="stylesheet" href="/styles/tailwind.css">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
