@@ -312,3 +312,28 @@ Similarly, I want to develop a simple script which will allow me to process GitH
 I have seen some other tools which achieve the same thing, but most look far more complicated than what I need, and this gives me a good opportunity to brush up on my Rust skills by writing a new CLI tool.
 
 If you enjoyed this blog, feel free to check out my [GitHub](https://github.com/harrydayexe) to see some more of my work, or read some of my other articles on this site!
+
+## Update: Improved Networking
+With the setup I originally described, there was one problem which I glossed over. Keen-eyed readers may have spotted the mount to my host Go module cache. This was a hacky workaround to a self-inflicted problem: my network firewall allowlisted by IP address, not by hostname. 
+At container start, the firewall script `dig`s each allowed hostname, and then put the returned IPs into an `ipset` to be allowed, while dropping all other ranges.
+
+The reason that this works for github.com for example, is due to GitHub publishing their static IP ranges for anyone to consume. GitHub uses stable API endpoints, so the IPs wouldn't kept swapped out from under the firewall's feet. 
+However, `proxy.golang.org`, or indeed `registry.npmjs.org`, or many other package managers, all live behind CDNs with large, rotating address pools. Running `dig` at startup captures the current snapshot of IPs, a fraction of the overall pool. By the time that anything reaches out to the address, the IP might have changed, causing connections to be denied. 
+
+More subtly, allowing an IP for a CDN edge also allows that IP for *any* host that connects through the VPN. The next person to use the current `proxy.golang.org` IP, might be a malicious actor. 
+### Fixing Things Properly
+The fix is a simple enough one. We need a way to lock down by default, but occasionally allow egress to certain package manager domains. The solution: run a Squid proxy which allows access to a set of hostnames. This removes the problem of rotating IP address pools, as the Squid proxy resolves this at call-time. 
+
+The container now egresses through a Squid proxy bound to `127.0.0.1:3128`, with the policy split in two:
+- **The kernel** decides *who* may talk to the internet. `OUTPUT` policy is `DROP`, and only the uid Squid drops to may open ports 80/443 or make a DNS query. `ipset` is gone.
+- **The proxy** decides *where* . `squid.conf` holds the domain allowlist.
+
+`HTTP_PROXY` and `HTTPS_PROXY` are set in `containerEnv` allowing every tool to pick them up without special cases. And because the kernel-level rule is about uid and not just the environment variable, an agent that unsets `HTTPS_PROXY` doesn't escape the allowlist, it just loses network access.
+
+The unexpected bonus is every request proxied through Squid is logged. This allows complete oversight on what an agent has connected to while running unsupervised, if the need ever arises for a deep investigation.
+
+After arriving at this new setup, my first question was how would a malicious agent escape it? Despite taking care to ensure the right user permissions were set on important proxy configuration, the devcontainer I was building on top of allowed the `vscode` user to become root with `sudo`, effectively undoing all the hard work. A quick change to the sudoers list fixed this issue for good.
+
+The biggest takeaway from this exercise for me is this: always treat agents as smarter than you. Even if they are not right now, one day they very well may be. The best line of defence is not what I like to call "suggestion configs", where we rely on a basic form of pattern matching to deny commands. Instead we need the same OS-level protections we rely on to reduce the impact that malware can have. Instead of simply running a few commands to gain root access, an agent would instead have to find, and exploit, a critical vulnerability in both the sandbox, and the virtualisation layer, in order to gain access to the host system. 
+
+Remember that the forbidden fruit is kept locking in the Garden of Eden for a reason.
