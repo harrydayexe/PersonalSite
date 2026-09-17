@@ -13,24 +13,24 @@ In the past year I have loosened my stance somewhat: a strong deny and allowlist
 
 We are obsessed with reports over CVE-9 vulnerabilities, allowing remote code execution via whichever open-source project is (un)lucky enough to be poked and prodded by Mythos, but we never stop to consider that we are actively allowing code execution with little-to-no oversight via LLM harnesses.
 
-However, not wanting to fall behind my peers, I recently decided to embrace agentic programming with open arms. But, before entering into this marriage of robot and human, a prenup was needed. I had my demands, but I was willing to compromise on the emergency jug of water next to my laptop incase an agent goes rogue. 
+However, not wanting to fall behind my peers, I recently decided to embrace agentic programming with open arms. But, before entering into this marriage of robot and human, a prenup was needed. I had my demands, but I was willing to compromise on the emergency jug of water next to my laptop in case an agent goes rogue. 
 
 ## Goals and Restrictions
 - [ ] **Autonomy** -  Enable Claude Code to run in auto-mode, or fully autonomously in headless instances
 - [ ] **Attribution and Provenance** - I want to easily distinguish between code I have written (either by hand or assisted via an LLM), vs purely agentic work.
 - [ ] **Access Control to GitHub** - LLMs should not, in any way, be able to get code onto the main branch without human approval.
-- [ ] **Sandboxing** - I am not about to grant access to my entire system for some rogue AI to get it's grubby mitts on my personal data
+- [ ] **Sandboxing** - I am not about to grant access to my entire system for some rogue AI to get its grubby mitts on my personal data
 
 With some goals and restrictions in mind, let me set out the key problems I faced, in achieving a setup which satisfies these constraints.
 
 ## Attribution and Provenance
-The key goal here is to be able to clearly identify which code I have written by hand, or through the use of Claude Code in a more supervised manor, versus the code which has been produced fully agentically by an LLM. This is somewhat of the easiest thing to solve, and gave me the perfect excuse for buying a new toy. 
+The key goal here is to be able to clearly identify which code I have written by hand, or through the use of Claude Code in a more supervised manner, versus the code which has been produced fully agentically by an LLM. This is somewhat of the easiest thing to solve, and gave me the perfect excuse for buying a new toy. 
 A few months ago I first discovered commit signing with Git. After following a few articles online, I setup a system I was happy with, which used PGP to sign commits I made on my machine as being written by me. 
 After adding the public key to my GitHub profile, my commits began to show as verified. 
 ![[verified-git-commits.png]]
 While this system worked well for my usage at the time, I quickly realised that any commits produced by Claude would also be signed by my key. There was nothing stopping that key from being accessed by a program on my machine. This somewhat defeats the point of code authenticity, anyone with access to my laptop would be able to produce commits and have them verified by GitHub as being mine. 
 
-Whilst the simple solution here would be to lock the private signing key behind a passphrase, I saw a perfect opportunity to spend some money. Enter YubiKey (not sponsored). If you haven't encountered a YubiKey, or, for that matter, any physical hardware key, it's a small USB security device that stores cryptographic keys in it's hardware. This is the same idea as "cold wallets" (ie [Trezor](https://trezor.io)) for crypto. The key never leaves the device, your computer sends the data to be signed to the YubiKey, the device signs the data using the private key and sends it back to your computer. 
+Whilst the simple solution here would be to lock the private signing key behind a passphrase, I saw a perfect opportunity to spend some money. Enter YubiKey (not sponsored). If you haven't encountered a YubiKey, or, for that matter, any physical hardware key, it's a small USB security device that stores cryptographic keys in its hardware. This is the same idea as "cold wallets" (ie [Trezor](https://trezor.io)) for crypto. The key never leaves the device, your computer sends the data to be signed to the YubiKey, the device signs the data using the private key and sends it back to your computer. 
 
 My variation also requires a pin entry before signing, and a physical touch of the key before any data is signed. This fits my needs perfectly: for one, no LLM will ever be able to sign a commit without me touching the key; and two, even someone who gains access to both my laptop and the key still can't sign a commit without my pin. Two birds with one ($60) stone.
 
@@ -108,7 +108,7 @@ I considered a few different methods for this, one was to use a VPS to run Claud
 The suggested implementation was to use a devcontainer, running on your local machine, to sandbox agentic work. This keeps the config and settings for the more agentic flavour of Claude Code separated from my current setup, which I am happy with for supervised work. 
 
 The key thing to keep in mind here, is what does the agent have access to inside the sandbox. All of the config for the devcontainer itself lives in a separate directory to the workspace, where the repos being worked on live, which is mounted into the container.
-This ensures that Claude Code cannot rewrite it's own rules. This does require two file paths to be written in each command to start or connect to the devcontainer, however this was mitigated through the use of zsh functions. 
+This ensures that Claude Code cannot rewrite its own rules. This does require two file paths to be written in each command to start or connect to the devcontainer, however this was mitigated through the use of zsh functions. 
 
 If you want a full in-depth look at my configuration, the repo is available on my GitHub [harrydayexe/agentic-container-config](https://github.com/harrydayexe/agentic-container-config). This is a work in-progress still but it's at a point where I am actively using it daily. 
 
@@ -136,7 +136,7 @@ This tells Git to use the GitHub cli to authenticate, rather than an SSH key. It
 
 The second step is to configure Claude Code. There are two sections here. The `managed-settings.json` and the general `claude` directory. The former is for policy rules which I don't want to change, and the general configuration that changes day to day goes in the `claude/` directory.
 
-My `managed-settings.json` can be seen below. The key things to note here are the `defaultMode`, this is `bypassPermission` for headless execution. The deny list acts as a soft guard against things I do not want the agent to do. Anthropic is clear that this is not bullet-proof, but it blocks most things, as long as they match the pattern. It's not full proof though, and this is something I will address later in my plans for the future. 
+My `managed-settings.json` can be seen below. The key things to note here are the `defaultMode`, this is `bypassPermission` for headless execution. The deny list acts as a soft guard against things I do not want the agent to do. Anthropic is clear that this is not bullet-proof, but it blocks most things, as long as they match the pattern. It's not fool proof though, and this is something I will address later in my plans for the future. 
 Finally the `allowManagedPermissionRulesOnly` and `disableBypassPermissionsMode` are both set to ensure that a repo's `settings.json` cannot override the defaults I have set. 
 ```json
 {
@@ -241,7 +241,7 @@ The other thing to note is the firewall configuration. This is mostly copied fro
   "postCreateCommand": "go install golang.org/x/vuln/cmd/govulncheck@latest && sudo /usr/local/bin/agentic-firewall.sh"
 }
 ```
-This is where the definition for devcontainer lives. It's a pretty standard setup, with the key things to note being the mounts, and environment variables. For mounts, I have the git config mounted as readonly, so that claude cannot update it's identity.
+This is where the definition for devcontainer lives. It's a pretty standard setup, with the key things to note being the mounts, and environment variables. For mounts, I have the git config mounted as readonly, so that claude cannot update its identity.
 
 The PAT token I spoke about earlier in the article, for communication with GitHub, is set up in `GH_TOKEN` environment variable. This allows the GitHub cli to authenticate with GitHub, and also, due to the Git config, allows for communicate via HTTPS using this token. 
 
@@ -295,7 +295,7 @@ I stored the PAT that I generated on GitHub in my MacOS keychain. This means tha
 ## Pitfalls Along the Way
 There were a few things that caught me out along the way, and hopefully by reading this article, you might save a few hours of debugging. 
 
-The first is that the claude-code devcontainer comes with it's own `init-firewall.sh`. Devcontainer features run after the Dockerfile, and so it was overwriting my own firewall setup. This is why I ended up switching the filename to `agentic-firewall.sh`, to be sure it was my own script that was running. 
+The first is that the claude-code devcontainer comes with its own `init-firewall.sh`. Devcontainer features run after the Dockerfile, and so it was overwriting my own firewall setup. This is why I ended up switching the filename to `agentic-firewall.sh`, to be sure it was my own script that was running. 
 
 The second thing is that the default `init-firewall.sh` that I copied from Anthropic doesn't handle duplicates well. `api.anthropic.com` and `claude.ai` resolve to the same IP. The stock script's domain list never collides, so the bug wasn't visible until I made my changes. Adding the `-exist` flag to `ipset add` was a simple fix. 
 
@@ -317,7 +317,7 @@ If you enjoyed this blog, feel free to check out my [GitHub](https://github.com/
 With the setup I originally described, there was one problem which I glossed over. Keen-eyed readers may have spotted the mount to my host Go module cache. This was a hacky workaround to a self-inflicted problem: my network firewall allowlisted by IP address, not by hostname. 
 At container start, the firewall script `dig`s each allowed hostname, and then put the returned IPs into an `ipset` to be allowed, while dropping all other ranges.
 
-The reason that this works for github.com for example, is due to GitHub publishing their static IP ranges for anyone to consume. GitHub uses stable API endpoints, so the IPs wouldn't kept swapped out from under the firewall's feet. 
+The reason that this works for github.com for example, is due to GitHub publishing their static IP ranges for anyone to consume. GitHub uses stable API endpoints, so the IPs wouldn't keep getting swapped out from under the firewall's feet. 
 However, `proxy.golang.org`, or indeed `registry.npmjs.org`, or many other package managers, all live behind CDNs with large, rotating address pools. Running `dig` at startup captures the current snapshot of IPs, a fraction of the overall pool. By the time that anything reaches out to the address, the IP might have changed, causing connections to be denied. 
 
 More subtly, allowing an IP for a CDN edge also allows that IP for *any* host that connects through the VPN. The next person to use the current `proxy.golang.org` IP, might be a malicious actor. 
@@ -336,4 +336,4 @@ After arriving at this new setup, my first question was how would a malicious ag
 
 The biggest takeaway from this exercise for me is this: always treat agents as smarter than you. Even if they are not right now, one day they very well may be. The best line of defence is not what I like to call "suggestion configs", where we rely on a basic form of pattern matching to deny commands. Instead we need the same OS-level protections we rely on to reduce the impact that malware can have. Instead of simply running a few commands to gain root access, an agent would instead have to find, and exploit, a critical vulnerability in both the sandbox, and the virtualisation layer, in order to gain access to the host system. 
 
-Remember that the forbidden fruit is kept locking in the Garden of Eden for a reason.
+Remember that the forbidden fruit is kept locked in the Garden of Eden for a reason.
