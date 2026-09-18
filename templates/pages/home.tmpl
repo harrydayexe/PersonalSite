@@ -15,7 +15,7 @@
     <link rel="canonical" href="{{.SiteURL}}/">
 
     {{/* Feed autodiscovery. Same feeds the blog pages advertise — the homepage
-         lists recent posts, so readers land here expecting to find them. */}}
+    lists recent posts, so readers land here expecting to find them. */}}
     {{if .FeedsEnabled}}
     <link rel="alternate" type="application/rss+xml" title="Harry Day — RSS" href="{{.BlogRoot}}rss.xml">
     <link rel="alternate" type="application/atom+xml" title="Harry Day — Atom" href="{{.BlogRoot}}atom.xml">
@@ -153,12 +153,13 @@
                                     target="_blank" rel="noopener noreferrer">x.com/harrydayexe</a>
                             </li>
                             {{/* Mirrors the RSS row in partials/footer.tmpl so Elsewhere
-                                 reads as the same component everywhere, even though the
-                                 home page does not use that partial. */}}
+                            reads as the same component everywhere, even though the
+                            home page does not use that partial. */}}
                             {{if .FeedsEnabled}}
                             <li>
                                 <a href="{{.BlogRoot}}rss.xml"
-                                    class="inline-flex items-center gap-2 font-mono text-xs text-muted hover:text-accent transition-colors duration-150">{{template "rss-icon"}}Subscribe via RSS</a>
+                                    class="inline-flex items-center gap-2 font-mono text-xs text-muted hover:text-accent transition-colors duration-150">{{template
+                                    "rss-icon"}}Subscribe via RSS</a>
                             </li>
                             {{end}}
                         </ul>
@@ -213,8 +214,25 @@
                     <div class="space-y-7 text-base leading-[1.65]">
                         <div>
                             <p>
+                                <a href="https://github.com/harrydayexe/GoBlog"
+                                    class="font-semibold hover:text-accent hover:border-b hover:border-accent transition-[color,border-color] duration-150"
+                                    target="_blank" rel="noopener noreferrer">GoBlog</a> &dash; A static blog generator
+                                written in Go, that turns a folder of Markdown files into a complete site - feeds,
+                                sitemap, and SEO metadata included. Get started with the CLI tool to generate static
+                                files, host the docker image with a volume of posts, or use the library inside your own
+                                Go application for unlimited customisation. GoBlog powers the writing section on this
+                                site.
+                            </p>
+                            <div class="font-mono text-xs uppercase tracking-[0.12em] mt-2 space-y-1.5">
+                                <div class="text-muted">2026 &ndash; Present</div>
+                                <div class="text-accent">Go &middot; Markdown</div>
+                            </div>
+                        </div>
+                        <div>
+                            <p>
                                 <a href="/songlinkr"
-                                    class="font-semibold hover:text-accent hover:border-b hover:border-accent transition-[color,border-color] duration-150">SongLinkr</a> &dash; An iOS application
+                                    class="font-semibold hover:text-accent hover:border-b hover:border-accent transition-[color,border-color] duration-150">SongLinkr</a>
+                                &dash; An iOS application
                                 that converts
                                 music
                                 links between streaming platforms so you can open them wherever you actually listen.
@@ -369,7 +387,8 @@
                         {{if .FeedsEnabled}}
                         <li>
                             <a href="{{.BlogRoot}}rss.xml"
-                                class="inline-flex items-center gap-2 font-mono text-xs text-muted hover:text-accent transition-colors duration-150">{{template "rss-icon"}}Subscribe via RSS</a>
+                                class="inline-flex items-center gap-2 font-mono text-xs text-muted hover:text-accent transition-colors duration-150">{{template
+                                "rss-icon"}}Subscribe via RSS</a>
                         </li>
                         {{end}}
                     </ul>
