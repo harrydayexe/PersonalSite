@@ -27,6 +27,12 @@ const (
 	AtomPath = blogRoot + "atom.xml"
 )
 
+// SitemapPath is where GoBlog's handler serves the blog's sitemap. It covers
+// the blog index, every post, the tags index and every tag page; the site's
+// hand-written pages are covered by internal/seo, which lists both sitemaps in
+// the sitemap index at /sitemap.xml.
+const SitemapPath = blogRoot + "sitemap.xml"
+
 // AddBlogRoutes registers the blog HTTP routes at /blog/ on the provided mux.
 // It uses custom templates matching the site's visual identity and serves posts
 // from the given fs.FS. It is not safe for concurrent use during setup, but the
@@ -66,6 +72,12 @@ func AddBlogRoutes(ctx context.Context, mux *http.ServeMux, posts fs.FS, templat
 		// It also sets BaseData.FeedsEnabled, which the shared partials gate
 		// their feed links on. No WithFeedPostLimit, so every post is included.
 		goblogconfig.WithBaseURL(siteURL),
+		// The base URL also switches on sitemap.xml and robots.txt. The
+		// sitemap is kept — it is served at SitemapPath and referenced from the
+		// site-wide sitemap index. GoBlog's robots.txt is not: it would
+		// advertise the blog sitemap alone, and internal/seo serves one at the
+		// origin root pointing at the index instead.
+		goblogconfig.WithDisableRobotsTxt(),
 	)
 	gen.ParserConfig = goblogparser.Config{
 		EnableCodeHighlighting: true,
