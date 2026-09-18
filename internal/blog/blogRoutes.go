@@ -60,10 +60,19 @@ func AddBlogRoutes(ctx context.Context, mux *http.ServeMux, posts fs.FS, templat
 		return err
 	}
 
+	// The images subtree is both served by the handler and read at parse time:
+	// the parser measures each referenced image so it renders with width and
+	// height (plus lazy loading). Without it images render bare.
+	assetsFS, err := fs.Sub(posts, "images")
+	if err != nil {
+		return err
+	}
+
 	gen := generator.New(
 		posts,
 		renderer,
 		goblogconfig.WithBlogRoot(blogRoot).AsGeneratorOption(),
+		goblogconfig.WithAssetsDir(assetsFS).AsGeneratorOption(),
 		goblogconfig.WithSiteTitle("Harry Day"),
 		goblogconfig.WithEnvironment(environment),
 		goblogconfig.WithCustomData(map[string]any{"siteURL": siteURL}),
@@ -79,8 +88,12 @@ func AddBlogRoutes(ctx context.Context, mux *http.ServeMux, posts fs.FS, templat
 		// origin root pointing at the index instead.
 		goblogconfig.WithDisableRobotsTxt(),
 	)
+	// Assigning ParserConfig wholesale would drop anything the generator
+	// options propagate into it, so the parser-facing fields are restated here.
 	gen.ParserConfig = goblogparser.Config{
 		EnableCodeHighlighting: true,
+		BlogRoot:               blogRoot,
+		AssetsDir:              assetsFS,
 	}
 
 	logger.DebugContext(ctx, "generator created", slog.String("config", gen.String()))
@@ -95,11 +108,6 @@ func AddBlogRoutes(ctx context.Context, mux *http.ServeMux, posts fs.FS, templat
 	}
 
 	logger.DebugContext(ctx, "blog generated", slog.String("index", string(blog.Index)))
-
-	assetsFS, err := fs.Sub(posts, "images")
-	if err != nil {
-		return err
-	}
 
 	handler := goblogserver.Handler(
 		blog,
