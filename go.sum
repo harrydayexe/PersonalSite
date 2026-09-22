@@ -23,6 +23,8 @@ github.com/harrydayexe/GoBlog/v2 v2.7.0-beta2 h1:J6PZE9INlqTiALHTMHBp2nP6jJk6GVm
 github.com/harrydayexe/GoBlog/v2 v2.7.0-beta2/go.mod h1:VgZLRaokneEGgsH0KoNjkTbEZe87znZSvpshab7hUJI=
 github.com/harrydayexe/GoWebUtilities v1.5.1 h1:1E/5IEBHdG8SfIwF2tqJhxypsk9VH1TIb1ofMmI6ZOg=
 github.com/harrydayexe/GoWebUtilities v1.5.1/go.mod h1:msGwhqkUbSAhhIR+uFnLE08OhBCwuJW0BQ5kUnBvI6I=
+github.com/harrydayexe/GoWebUtilities v1.6.0 h1:khi72M6oFY7GzFj4rMsmlRRTV2rAB1PsVEafmyhnVzE=
+github.com/harrydayexe/GoWebUtilities v1.6.0/go.mod h1:msGwhqkUbSAhhIR+uFnLE08OhBCwuJW0BQ5kUnBvI6I=
 github.com/hexops/gotextdiff v1.0.3 h1:gitA9+qJrrTCsiCl7+kh75nPqQt1cx4ZkudSTLoUqJM=
 github.com/hexops/gotextdiff v1.0.3/go.mod h1:pSWU5MAI3yDq+fZBTazCSJysOMbxWL1BSow5/V2vxeg=
 github.com/kr/pretty v0.3.1 h1:flRD4NNwYAUpkphVc1HcthR4KEIFJ65n8Mw5qdRn3LE=

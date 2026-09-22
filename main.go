@@ -112,6 +112,7 @@ func main() {
 
 	stack := middleware.CreateStack(
 		middleware.NewLoggingMiddleware(logger),
+		middleware.NewRedirectWWW(),
 	)
 
 	if err := server.Run(ctx, stack(mux)); err != nil {
