@@ -3,7 +3,7 @@ module github.com/harrydayexe/PersonalSite
 go 1.26.3
 
 require (
-	github.com/harrydayexe/GoBlog/v2 v2.7.0-beta2
+	github.com/harrydayexe/GoBlog/v2 v2.7.0-beta3
 	github.com/harrydayexe/GoWebUtilities v1.6.0
 )
 
@@ -13,6 +13,7 @@ require (
 	github.com/caarlos0/env/v11 v11.3.1 // indirect
 	github.com/dlclark/regexp2 v1.11.5 // indirect
 	github.com/gorilla/feeds v1.2.0 // indirect
+	github.com/mangoumbrella/goldmark-figure v1.4.0 // indirect
 	github.com/yuin/goldmark v1.7.16 // indirect
 	github.com/yuin/goldmark-highlighting/v2 v2.0.0-20230729083705-37449abec8cc // indirect
 	go.abhg.dev/goldmark/frontmatter v0.3.0 // indirect

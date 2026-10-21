@@ -129,8 +129,28 @@
     font-family: var(--font-mono);
     font-size: 0.75rem;
     color: var(--muted);
+    line-height: 1.5;
     text-align: center;
-    margin-top: 0.4em;
+    margin-top: 0.6em;
+}
+
+/* goldmark-figure wraps the caption in a <p>; stop the body <p> rule
+   from overriding the caption's size and colour */
+.post-content figcaption p {
+    font-size: inherit;
+    line-height: inherit;
+    color: inherit;
+}
+
+.post-content figcaption em { font-style: normal; }
+
+.post-content figcaption a {
+    color: inherit;
+    border-bottom: 1px solid var(--rule);
+}
+.post-content figcaption a:hover {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
 }
 
 .post-content :not(pre) > code {
