@@ -60,8 +60,9 @@
 
             <header class="space-y-6">
                 <div class="flex items-center gap-4">
-                    <img src="/images/songlinkr/AppIcon.svg" alt="SongLinkr app icon"
-                        class="w-16 h-16 rounded-2xl shrink-0">
+                    <img src="/images/songlinkr/Icon-iOS@1x.png"
+                        srcset="/images/songlinkr/Icon-iOS@1x.png 1x, /images/songlinkr/Icon-iOS@2x.png 2x, /images/songlinkr/Icon-iOS@3x.png 3x"
+                        width="64" height="64" alt="SongLinkr app icon" class="w-16 h-16 rounded-2xl shrink-0">
                     <div>
                         <h1 class="text-3xl font-semibold">SongLinkr</h1>
                         <p class="font-mono text-xs uppercase tracking-[0.15em] text-muted mt-1">Get music links for any
@@ -75,14 +76,14 @@
                 </p>
                 <a href="https://apps.apple.com/us/app/songlinkr/id1561986085" target="_blank" rel="noopener noreferrer"
                     class="inline-block">
-                    <img src="/images/songlinkr/AppStoreBadge/BlackBadge.svg" alt="Download on the App Store"
+                    <img src="/images/songlinkr/appstore-black.svg" alt="Download on the App Store"
                         class="h-11 dark:hidden">
-                    <img src="/images/songlinkr/AppStoreBadge/WhiteBadge.svg" alt="Download on the App Store"
+                    <img src="/images/songlinkr/appstore-white.svg" alt="Download on the App Store"
                         class="h-11 hidden dark:block">
                 </a>
-                <div class="rounded-2xl border border-rule bg-paper-deep p-6 flex justify-center">
-                    <img src="/images/songlinkr/HeroImageLight.png" alt="SongLinkr showing a converted song link"
-                        class="max-w-[240px] w-full rounded-xl">
+                <div class="rounded-2xl border border-rule bg-paper-deep px-6 flex justify-center">
+                    <img src="/images/songlinkr/dual.png" alt="SongLinkr app on iPhone and iPad."
+                        class="max-w-[360px] w-full">
                 </div>
             </header>
 
@@ -94,9 +95,10 @@
                         complain it's on the wrong streaming service. SongLinkr takes a link to a song or album
                         and gives you the freedom to open it on whichever platform you actually use.
                     </p>
-                    <div class="rounded-2xl border border-rule bg-paper-deep p-6 flex justify-center">
-                        <img src="/images/songlinkr/LinkHeroImageLight.png"
-                            alt="SongLinkr converting a link between platforms" class="max-w-[220px] w-full rounded-xl">
+                    <div class="rounded-2xl border border-rule bg-paper-deep px-6 flex justify-center">
+                        <img src="/images/songlinkr/results.png"
+                            alt="SongLinkr app showing the search results screen. The album artwork, title and artist are shown for Rick Astley's 'Never Gonna Give You Up', above a list of matching music streaming platforms."
+                            class="max-w-[360px] w-full">
                     </div>
                 </div>
             </section>
@@ -111,25 +113,25 @@
                         API, covering a wide and growing range of platforms — Spotify, Apple Music, YouTube,
                         SoundCloud, Deezer, and many more.
                     </p>
-                    <div class="rounded-2xl border border-rule bg-paper-deep p-6 flex justify-center">
-                        <img src="/images/songlinkr/ListFeatureImageLight.png"
-                            alt="SongLinkr listing results across streaming platforms"
-                            class="max-w-[220px] w-full rounded-xl">
+                    <div class="rounded-2xl border border-rule bg-paper-deep px-6 flex justify-center">
+                        <img src="/images/songlinkr/platforms.png"
+                            alt="SongLinkr app showing default platform selection screen, with a list of music streaming platforms and their logos."
+                            class="max-w-[360px] w-full">
                     </div>
                 </div>
             </section>
 
             <section class="space-y-4 scroll-mt-12">
-                {{template "section-label" "Shazam, built in"}}
+                {{template "section-label" "Your searches, your library."}}
                 <div class="space-y-6">
                     <p class="text-base leading-[1.65]">
-                        Shazam's recognition technology is built into the app, so you can identify whatever's playing
-                        around you — in a shop, a restaurant, or on the radio — and get it onto your platform of
-                        choice. Matches sync back to your Shazam library too.
+                        All your searches with SongLinkr, whether they are via links or Shazam, are saved in your
+                        library just a click away. Get links again to share to a friend, or just to remember which song
+                        you found with Shazam.
                     </p>
-                    <div class="rounded-2xl border border-rule bg-paper-deep p-6 flex justify-center">
-                        <img src="/images/songlinkr/ShazamFeatureImageLight.png" alt="SongLinkr showing a Shazam match"
-                            class="max-w-[220px] w-full rounded-xl">
+                    <div class="rounded-2xl border border-rule bg-paper-deep px-6 flex justify-center">
+                        <img src="/images/songlinkr/library.png" alt="SongLinkr showing a Shazam match"
+                            class="max-w-[360px] w-full">
                     </div>
                 </div>
             </section>
@@ -137,15 +139,16 @@
             <section class="space-y-4 scroll-mt-12">
                 {{template "section-label" "A few more details"}}
                 <ul class="space-y-4 text-base leading-[1.65]">
-                    <li><span class="font-semibold">Clipboard-aware.</span> If you have a link copied when you open the
-                        app, it's pasted in automatically.</li>
+                    <li><span class="font-semibold">Shazam? Built in.</span> Use Shazam's music recognition technology
+                        to identify a song playing around you, and instantly open it in your favourite platform.</li>
                     <li><span class="font-semibold">Set-and-forget defaults.</span> Choose a favourite platform once
                         and results open there automatically from then on.</li>
-                    <li><span class="font-semibold">Share extension.</span> Send a link to SongLinkr directly from any
-                        share sheet.</li>
+                    <li><span class="font-semibold">Share extension.</span> Search a link with SongLinkr directly from
+                        the share sheet.</li>
                     <li><span class="font-semibold">Light and dark.</span> Follows the system appearance, day or
                         night.</li>
-                    <li><span class="font-semibold">Translated.</span> Available in English, Spanish, and German.</li>
+                    <li><span class="font-semibold">Translated.</span> Available in English, Spanish, Japanese, and
+                        German.</li>
                 </ul>
             </section>
 
@@ -166,8 +169,9 @@
                         class="text-muted hover:text-accent transition-colors duration-150">Support</a>
                 </div>
                 <p class="font-mono text-xs text-muted leading-relaxed">
-                    Apple, the Apple logo and iPhone are trademarks of Apple Inc., registered in the U.S. and other
-                    countries. App Store is a service mark of Apple Inc.
+                    Apple, iPhone, iPad, Apple Music and Shazam are trademarks of Apple Inc., registered in the U.S. and
+                    other countries and regions. App Store is a service mark of Apple Inc., registered in the U.S. and
+                    other countries and regions. This app is not affiliated with or endorsed by any of these companies.
                 </p>
             </section>
 
