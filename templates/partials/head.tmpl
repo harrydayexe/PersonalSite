@@ -11,13 +11,14 @@
 {{$isPost := hasPrefix .Path (printf "%sposts/" .BlogRoot)}}
 {{$isTag := hasPrefix .Path (printf "%stags/" .BlogRoot)}}
 {{$isTagsIndex := eq .Path (printf "%stags" .BlogRoot)}}
+{{$title := printf "%s | %s" .SiteTitle (or .PageTitle "Blog")}}
 
 <head>
     <meta charset="utf-8">
-    <title>{{if .PageTitle}}{{.PageTitle}} — {{end}}{{.SiteTitle}}</title>
+    <title>{{$title}}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
-        content="{{if .Description}}{{.Description}}{{else}}Harry Day's blog — software, projects, and ideas.{{end}}">
+        content="{{if .Description}}{{.Description}}{{else}}Harry Day's blog - software, projects, and ideas.{{end}}">
     <meta name="robots" content="index, follow">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="language" content="English">
@@ -29,8 +30,8 @@
     {{/* Feed autodiscovery. The blog-root paths are canonical; /rss.xml and
          /atom.xml exist only as redirects for readers that probe the site root. */}}
     {{if .FeedsEnabled}}
-    <link rel="alternate" type="application/rss+xml" title="Harry Day — RSS" href="{{.BlogRoot}}rss.xml">
-    <link rel="alternate" type="application/atom+xml" title="Harry Day — Atom" href="{{.BlogRoot}}atom.xml">
+    <link rel="alternate" type="application/rss+xml" title="Harry Day | RSS" href="{{.BlogRoot}}rss.xml">
+    <link rel="alternate" type="application/atom+xml" title="Harry Day | Atom" href="{{.BlogRoot}}atom.xml">
     {{end}}
 
     <!-- Favicon -->
@@ -54,23 +55,23 @@
     {{else}}
     <meta property="og:type" content="website">
     {{end}}
-    <meta property="og:title" content="{{if .PageTitle}}{{.PageTitle}} — {{end}}{{.SiteTitle}}">
+    <meta property="og:title" content="{{$title}}">
     <meta property="og:description"
-        content="{{if .Description}}{{.Description}}{{else}}Harry Day's blog — software, projects, and ideas.{{end}}">
+        content="{{if .Description}}{{.Description}}{{else}}Harry Day's blog - software, projects, and ideas.{{end}}">
     <meta property="og:url" content="{{.Custom.siteURL}}{{.Path}}">
     <meta property="og:image" content="{{.Custom.siteURL}}/images/socialimage.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="Harry Day — software engineer">
+    <meta property="og:image:alt" content="Harry Day - software engineer">
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@harrydayexe">
-    <meta name="twitter:title" content="{{if .PageTitle}}{{.PageTitle}} — {{end}}{{.SiteTitle}}">
+    <meta name="twitter:title" content="{{$title}}">
     <meta name="twitter:description"
-        content="{{if .Description}}{{.Description}}{{else}}Harry Day's blog — software, projects, and ideas.{{end}}">
+        content="{{if .Description}}{{.Description}}{{else}}Harry Day's blog - software, projects, and ideas.{{end}}">
     <meta name="twitter:image" content="{{.Custom.siteURL}}/images/socialimage.png">
-    <meta name="twitter:image:alt" content="Harry Day — software engineer">
+    <meta name="twitter:image:alt" content="Harry Day - software engineer">
 
     <!-- Structured data -->
     <script type="application/ld+json">
@@ -182,7 +183,7 @@
                 "name": "Writing",
                 {{/* Not .Description: the generator supplies "Recent blog posts" for the
                      index, which is too thin to be worth indexing. */}}
-                "description": "Harry Day's blog — software, projects, and ideas.",
+                "description": "Harry Day's blog - software, projects, and ideas.",
                 "inLanguage": "en-GB",
                 "isPartOf": {"@id": {{$websiteID}}},
                 "author": {"@id": {{$personID}}},
